@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: PHPUnit_plugin
+Bundle-SymbolicName: PHPUnit_plugin;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Activator: org.fred.plugin.php.test.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.dltk.core;bundle-version="1.0.2",
+ org.eclipse.core.resources;bundle-version="3.5.2",
+ org.eclipse.php.ui;bundle-version="2.1.1"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
