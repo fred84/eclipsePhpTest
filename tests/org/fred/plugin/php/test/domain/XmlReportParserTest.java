@@ -2,15 +2,19 @@ package org.fred.plugin.php.test.domain;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 public class XmlReportParserTest {
 
 	@Test
-	public void parse() {
+	public void parse() throws SAXException, IOException, ParserConfigurationException {
 		String xml = 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
 			"<testsuites>" +
