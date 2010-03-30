@@ -13,4 +13,8 @@ public class TestCase {
 		this.file = file;
 		this.line = line;
 	}
+	
+	public String toString() {
+		return "[" + className + "::" + name + " (" + file + ") at " + line + "]";
+	}
 }

@@ -1,11 +1,15 @@
 package org.fred.plugin.php.test.domain;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.xerces.parsers.DOMParser;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 
 public class XmlReportParser implements IReportParser {
@@ -15,10 +19,23 @@ public class XmlReportParser implements IReportParser {
 		// TODO Auto-generated method stub
 
 		try {
-			DOMParser parser = new DOMParser();
-			parser.parse(xml); //org.xml.sax.SAXException, java.io.IOException;
-			Document doc = parser.getDocument();
-			
+	        InputSource is = new InputSource();
+	        is.setCharacterStream(new StringReader(xml));
+	        
+	        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+
+	        NodeList suites = doc.getElementsByTagName("testsuite");
+	        
+	        for(int i = 0; i < suites.getLength(); i++) {
+	        	TestSuite suite = new TestSuite(
+	        		suites.item(i).getAttributes().getNamedItem("class").toString(),
+	        		suites.item(i).getAttributes().getNamedItem("file").toString()
+	        	);
+	        	
+	        	
+	        			
+	        }
+	        
 			return new ArrayList<TestCase>();
 	/*
 			doc.getE
