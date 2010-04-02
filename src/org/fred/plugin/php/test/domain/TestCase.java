@@ -14,7 +14,51 @@ public class TestCase {
 		this.line = line;
 	}
 	
+	
+	
+	public String getName() {
+		return name;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public String getFile() {
+		return file;
+	}
+
+	public int getLine() {
+		return line;
+	}
+
+	public boolean equals(Object other) {
+		if (!(other instanceof TestCase)) {
+			return false;
+		}
+		
+		TestCase obj = (TestCase)other;
+		
+		if (!name.equals(obj.getName())) {
+			return false;
+		}
+		
+		if (!className.equals(obj.getClassName())) {
+			return false;
+		}
+		
+		if (!file.equals(obj.getFile())) {
+			return false;
+		}
+		
+		if (line != obj.getLine()) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public String toString() {
-		return "[" + className + "::" + name + " (" + file + ") at " + line + "]";
+		return name + " at " + line;
 	}
 }

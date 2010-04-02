@@ -9,19 +9,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 
 public class XmlReportParser implements IReportParser {
 
 	@Override
 	public List<TestSuite> parse(String xml) throws SAXException, IOException, ParserConfigurationException {
-		// TODO Auto-generated method stub
-
-	
         InputSource is = new InputSource();
         is.setCharacterStream(new StringReader(xml));
         
@@ -33,8 +28,8 @@ public class XmlReportParser implements IReportParser {
         
         for(int i = 0; i < suitesNodes.getLength(); i++) {
         	TestSuite suite = new TestSuite(
-        		suitesNodes.item(i).getAttributes().getNamedItem("name").toString(),
-        		suitesNodes.item(i).getAttributes().getNamedItem("file").toString()
+        		suitesNodes.item(i).getAttributes().getNamedItem("name").getNodeValue(),
+        		suitesNodes.item(i).getAttributes().getNamedItem("file").getNodeValue()
         	);
         	
         	suites.add(suite);
@@ -44,19 +39,19 @@ public class XmlReportParser implements IReportParser {
         	for(int j = 0; j < cases.getLength(); j++) {
         		if (cases.item(j).hasChildNodes()) {
         			TestCase testCase = new FailedTestCase(
-        				cases.item(j).getAttributes().getNamedItem("name").toString(), 
-        				cases.item(j).getAttributes().getNamedItem("class").toString(), 
-        				cases.item(j).getAttributes().getNamedItem("file").toString(), 
-        				Integer.parseInt(cases.item(j).getAttributes().getNamedItem("line").toString()), 
-        				cases.item(j).getFirstChild().toString()
+        				cases.item(j).getAttributes().getNamedItem("name").getNodeValue(), 
+        				cases.item(j).getAttributes().getNamedItem("class").getNodeValue(), 
+        				cases.item(j).getAttributes().getNamedItem("file").getNodeValue(), 
+        				Integer.parseInt(cases.item(j).getAttributes().getNamedItem("line").getNodeValue()), 
+        				cases.item(j).getFirstChild().getTextContent()
         			);
         			suite.addCase(testCase);
         		} else {
 	        		TestCase testCase = new TestCase(
-	        			cases.item(j).getAttributes().getNamedItem("name").toString(), 
-	        			cases.item(j).getAttributes().getNamedItem("class").toString(), 
-	        			cases.item(j).getAttributes().getNamedItem("file").toString(), 
-	        			Integer.parseInt(cases.item(j).getAttributes().getNamedItem("line").toString())
+	        			cases.item(j).getAttributes().getNamedItem("name").getNodeValue(), 
+	        			cases.item(j).getAttributes().getNamedItem("class").getNodeValue(), 
+	        			cases.item(j).getAttributes().getNamedItem("file").getNodeValue(), 
+	        			Integer.parseInt(cases.item(j).getAttributes().getNamedItem("line").getNodeValue())
 	        		);
 	        		suite.addCase(testCase);
         		}
