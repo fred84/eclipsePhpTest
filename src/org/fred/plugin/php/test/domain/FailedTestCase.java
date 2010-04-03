@@ -1,11 +1,11 @@
 package org.fred.plugin.php.test.domain;
 
-public class FailedTestCase extends TestCase {
+class FailedTestCase extends TestCase {
 
 	protected String description;
 	
-	public FailedTestCase(String name, String className, String file, int line, String description) {
-		super(name, className, file, line);
+	public FailedTestCase(String name, String file, int line, String description) {
+		super(name, file, line);
 		this.description = description;
 	}
 	
@@ -20,12 +20,7 @@ public class FailedTestCase extends TestCase {
 		
 		FailedTestCase obj = (FailedTestCase)other;
 		
-		return description.equals(obj.getDescription());
-	}
-		
-	
-	public String getDescription() {
-		return description;
+		return description.equals(obj.description);
 	}
 
 	public String toString() {

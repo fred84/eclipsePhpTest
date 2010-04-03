@@ -13,7 +13,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class XmlReportParser implements IReportParser {
+class XmlReportParser implements IReportParser {
 
 	@Override
 	public List<TestSuite> parse(String xml) throws SAXException, IOException, ParserConfigurationException {
@@ -40,7 +40,6 @@ public class XmlReportParser implements IReportParser {
         		if (cases.item(j).hasChildNodes()) {
         			TestCase testCase = new FailedTestCase(
         				cases.item(j).getAttributes().getNamedItem("name").getNodeValue(), 
-        				cases.item(j).getAttributes().getNamedItem("class").getNodeValue(), 
         				cases.item(j).getAttributes().getNamedItem("file").getNodeValue(), 
         				Integer.parseInt(cases.item(j).getAttributes().getNamedItem("line").getNodeValue()), 
         				cases.item(j).getFirstChild().getTextContent()
@@ -49,7 +48,6 @@ public class XmlReportParser implements IReportParser {
         		} else {
 	        		TestCase testCase = new TestCase(
 	        			cases.item(j).getAttributes().getNamedItem("name").getNodeValue(), 
-	        			cases.item(j).getAttributes().getNamedItem("class").getNodeValue(), 
 	        			cases.item(j).getAttributes().getNamedItem("file").getNodeValue(), 
 	        			Integer.parseInt(cases.item(j).getAttributes().getNamedItem("line").getNodeValue())
 	        		);

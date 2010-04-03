@@ -1,35 +1,16 @@
 package org.fred.plugin.php.test.domain;
 
-public class TestCase {
+class TestCase {
 
 	protected String name;
 	protected String className;
 	protected String file;
 	protected int line;
 	
-	public TestCase(String name, String className, String file, int line) {
+	public TestCase(String name, String file, int line) {
 		this.name = name;
-		this.className = className;
 		this.file = file;
 		this.line = line;
-	}
-	
-	
-	
-	public String getName() {
-		return name;
-	}
-
-	public String getClassName() {
-		return className;
-	}
-
-	public String getFile() {
-		return file;
-	}
-
-	public int getLine() {
-		return line;
 	}
 
 	public boolean equals(Object other) {
@@ -39,19 +20,15 @@ public class TestCase {
 		
 		TestCase obj = (TestCase)other;
 		
-		if (!name.equals(obj.getName())) {
+		if (!name.equals(obj.name)) {
 			return false;
 		}
 		
-		if (!className.equals(obj.getClassName())) {
+		if (!file.equals(obj.file)) {
 			return false;
 		}
 		
-		if (!file.equals(obj.getFile())) {
-			return false;
-		}
-		
-		if (line != obj.getLine()) {
+		if (line != obj.line) {
 			return false;
 		}
 		
