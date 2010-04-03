@@ -4,12 +4,10 @@ class TestCase {
 
 	protected String name;
 	protected String className;
-	protected String file;
 	protected int line;
 	
-	public TestCase(String name, String file, int line) {
+	public TestCase(String name, int line) {
 		this.name = name;
-		this.file = file;
 		this.line = line;
 	}
 
@@ -21,10 +19,6 @@ class TestCase {
 		TestCase obj = (TestCase)other;
 		
 		if (!name.equals(obj.name)) {
-			return false;
-		}
-		
-		if (!file.equals(obj.file)) {
 			return false;
 		}
 		

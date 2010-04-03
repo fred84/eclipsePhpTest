@@ -14,6 +14,11 @@ class TestSuite {
 		this.path = path;
 	}
 	
+	public TestSuite withCase(TestCase testCase) {
+		addCase(testCase);
+		return this;
+	}
+	
 	public void addCase(TestCase testCase) {
 		cases.add(testCase);
 	}
@@ -38,5 +43,16 @@ class TestSuite {
 		}
 		
 		return cases.equals(obj.cases);
+	}
+
+	public List<FailedTestCase> getFailedTestCases() {
+		List <FailedTestCase> failed = new ArrayList<FailedTestCase>();
+		
+		for (TestCase testCase: cases) {
+			if (testCase instanceof FailedTestCase) {
+				failed.add((FailedTestCase)testCase);
+			}
+		}
+		return failed;
 	}
 }

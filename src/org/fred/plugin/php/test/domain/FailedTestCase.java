@@ -4,8 +4,8 @@ class FailedTestCase extends TestCase {
 
 	protected String description;
 	
-	public FailedTestCase(String name, String file, int line, String description) {
-		super(name, file, line);
+	public FailedTestCase(String name, int line, String description) {
+		super(name, line);
 		this.description = description;
 	}
 	
