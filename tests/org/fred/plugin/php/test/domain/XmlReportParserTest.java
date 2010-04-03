@@ -28,17 +28,8 @@ public class XmlReportParserTest {
 
 		
 		TestSuite suite = new TestSuite("MyTestCase", "/test3/test/MyTestCase.php");
-		
-		suite.addCase(new TestCase("testWillPass", "/test3/test/MyTestCase.php", 4));
-		suite.addCase(
-				new FailedTestCase(
-						"testWillFail", 
-						"/test3/test/MyTestCase.php", 
-						8,
-						"MyTestCase::testWillFail"
-				)
-		);
-		
+		suite.addCase(new TestCase("testWillPass", 4));
+		suite.addCase(new FailedTestCase("testWillFail", 8, "MyTestCase::testWillFail"));	
 		
 		XmlReportParser parser = new XmlReportParser();
 		
