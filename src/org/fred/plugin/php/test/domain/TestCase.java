@@ -3,7 +3,6 @@ package org.fred.plugin.php.test.domain;
 class TestCase {
 
 	protected String name;
-	protected String className;
 	protected int line;
 	
 	public TestCase(String name, int line) {
@@ -22,11 +21,7 @@ class TestCase {
 			return false;
 		}
 		
-		if (line != obj.line) {
-			return false;
-		}
-		
-		return true;
+		return line == obj.line;
 	}
 	
 	public String toString() {
