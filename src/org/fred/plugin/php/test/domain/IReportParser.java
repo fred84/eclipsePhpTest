@@ -8,8 +8,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-public interface IReportParser {
+interface IReportParser {
 
-	public List<TestSuite> parse(File resultFile) throws SAXException, IOException, ParserConfigurationException;
+	List<TestSuite> parse(File resultFile) throws SAXException, IOException, ParserConfigurationException;
 	
 }

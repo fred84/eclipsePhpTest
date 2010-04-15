@@ -5,7 +5,7 @@ class TestCase {
 	protected String name;
 	protected int line;
 	
-	public TestCase(String name, int line) {
+	TestCase(String name, int line) {
 		this.name = name;
 		this.line = line;
 	}

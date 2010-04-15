@@ -1,32 +1,73 @@
 package org.fred.plugin.php.test.domain;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class CommandLineExecutor {
+class CommandLineExecutor {
 
-	public void run() throws IOException {
-		// TODO add working directory as last param
-		Process process = Runtime.getRuntime().exec("phpunit"); 
-		
-		BufferedInputStream out = new BufferedInputStream(process.getInputStream());
-		
-		BufferedReader commandResult = new BufferedReader(new InputStreamReader(out));
-		
-	
-		try {
-			process.waitFor();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private static class OutputBuffer extends Thread {
+		private InputStream stream;
+		private StringBuffer result = new StringBuffer();
+
+		OutputBuffer(final InputStream is) {
+			stream = is;
 		}
-		
-		commandResult.close();
-		
-		
+
+		public void run() {
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+
+				String line;
+				while ((line = br.readLine()) != null) {
+					result.append(line);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String getOutput() {
+			return result.toString();
+		}
+	}
+
+	String customCommand(String command) throws IOException, InterruptedException {
+		return run(command);
 	}
 	
+	String getVersion() throws IOException, InterruptedException {
+		String command = "phpunit --version"; 
+		
+		Pattern replace = Pattern.compile("(\\d+\\.\\d+\\.\\d+)");
+		Matcher matcher = replace.matcher(run(command));
+		
+		if (!matcher.find()) {
+			throw new IOException("PHPUnit not found");
+		}
+		
+		return matcher.group();
+	}
 	
+	private String run(String command) throws IOException, InterruptedException {
+		// TODO add working directory as last parameter
+		Process process = Runtime.getRuntime().exec(command);
+
+		OutputBuffer stderr = new OutputBuffer(process.getErrorStream());         
+		OutputBuffer stdout = new OutputBuffer(process.getInputStream());       
+
+		stderr.start();
+		stdout.start();
+		
+		process.waitFor();
+
+		if (!stderr.getOutput().equals("")) {
+			throw new IOException(stderr.getOutput());
+		}
+		
+		return stdout.getOutput();
+	}
 }

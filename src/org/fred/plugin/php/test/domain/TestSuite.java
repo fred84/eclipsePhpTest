@@ -9,17 +9,12 @@ class TestSuite {
 	private String path;
 	private List<TestCase> cases = new ArrayList<TestCase>();
 	
-	public TestSuite(String name, String path) {
+	TestSuite(String name, String path) {
 		this.name = name;
 		this.path = path;
 	}
 	
-	public TestSuite withCase(TestCase testCase) {
-		addCase(testCase);
-		return this;
-	}
-	
-	public void addCase(TestCase testCase) {
+	void addCase(TestCase testCase) {
 		cases.add(testCase);
 	}
 	
@@ -45,7 +40,7 @@ class TestSuite {
 		return cases.equals(obj.cases);
 	}
 
-	public List<FailedTestCase> getFailedTestCases() {
+	List<FailedTestCase> getFailedTestCases() {
 		List <FailedTestCase> failed = new ArrayList<FailedTestCase>();
 		
 		for (TestCase testCase: cases) {

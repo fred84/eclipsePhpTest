@@ -4,9 +4,9 @@ class FailedTestCase extends TestCase {
 
 	private String description;
 	
-	public FailedTestCase(String name, int line, String description) {
+	FailedTestCase(String name, int line, String descr) {
 		super(name, line);
-		this.description = description;
+		description = descr;
 	}
 	
 	public boolean equals(Object other) {
