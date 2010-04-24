@@ -2,33 +2,16 @@ package org.fred.plugin.php.test.domain;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 public class XmlReportParserTest {
-
-	private File resultFile;
-	
-	@Before
-	public void createFile() throws IOException {
-		resultFile = File.createTempFile("test", "xml");
-	}
-	
-	@After
-	public void deleteFile() {
-		resultFile.delete();
-	}
 	
 	@Test
 	public void parse() throws SAXException, IOException, ParserConfigurationException {
@@ -38,30 +21,16 @@ public class XmlReportParserTest {
 		suite.addCase(new FailedTestCase("testWillFail", 8, "MyTestCase::testWillFail"));	
 		List<TestSuite> expected = new ArrayList<TestSuite>();
 		expected.add(suite);
-		
-		writeTestResultsToFile(getTestResult());
 		// verify
-		assertEquals(expected, new XmlReportParser().parse(resultFile));
+		assertEquals(expected, new XmlReportParser().parse(getTestResult()));
 	}
 	
 	public void parseInvalidFormatXml() throws SAXException, IOException, ParserConfigurationException {
-		// fixture
-		writeTestResultsToFile(getInvalidFormatXml());
-		// verify
-		new XmlReportParser().parse(resultFile);
+		new XmlReportParser().parse(getInvalidFormatXml());
 	}
 	
 	public void parseMalformedXml() throws SAXException, IOException, ParserConfigurationException {
-		// fixture
-		writeTestResultsToFile(getMalformedXml());
-		// verify
-		new XmlReportParser().parse(resultFile);
-	}
-	
-	private void writeTestResultsToFile(String result) throws IOException {
-		BufferedWriter out = new BufferedWriter(new FileWriter(resultFile));
-	    out.write(result);
-	    out.close();
+		new XmlReportParser().parse(getMalformedXml());
 	}
 	
 	private String getTestResult() {
@@ -82,6 +51,5 @@ public class XmlReportParserTest {
 	
 	private String getInvalidFormatXml() {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?><result></result>";
-	}	
-	
+	}		
 }
