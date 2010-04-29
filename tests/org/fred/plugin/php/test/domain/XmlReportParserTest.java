@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 public class XmlReportParserTest {
 	
 	@Test
-	public void parse() throws SAXException, IOException, ParserConfigurationException {
+	public void parse() throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException {
 		// fixture
 		TestSuite suite = new TestSuite("MyTestCase", "/test3/test/MyTestCase.php");
 		suite.addCase(new TestCase("testWillPass", 4));
@@ -24,12 +24,14 @@ public class XmlReportParserTest {
 		// verify
 		assertEquals(expected, new XmlReportParser().parse(getTestResult()));
 	}
-	
-	public void parseInvalidFormatXml() throws SAXException, IOException, ParserConfigurationException {
+
+	@Test(expected = ResultsNotFoundException.class)
+	public void parseInvalidFormatXml() throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException {
 		new XmlReportParser().parse(getInvalidFormatXml());
 	}
 	
-	public void parseMalformedXml() throws SAXException, IOException, ParserConfigurationException {
+	@Test(expected = ResultsNotFoundException.class)
+	public void parseMalformedXml() throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException {
 		new XmlReportParser().parse(getMalformedXml());
 	}
 	

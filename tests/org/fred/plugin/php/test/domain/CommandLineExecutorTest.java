@@ -18,7 +18,8 @@ public class CommandLineExecutorTest {
 	
 	@Test(expected = IOException.class)
 	public void customCommand_incorrect() throws IOException, InterruptedException {
-		executor.customCommand("phpunit12345");
+		String[] command = {"phpunit12345"};
+		executor.customCommand(command);
 	}
 	
 	@Test

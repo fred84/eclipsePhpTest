@@ -9,6 +9,6 @@ import org.xml.sax.SAXException;
 
 interface IReportParser {
 	
-	List<TestSuite> parse(String xml) throws SAXException, IOException, ParserConfigurationException;
+	List<TestSuite> parse(String xml) throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException;
 
 }

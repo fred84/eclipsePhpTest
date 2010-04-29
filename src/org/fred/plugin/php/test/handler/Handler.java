@@ -3,12 +3,18 @@ package org.fred.plugin.php.test.handler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IScriptProject;
+import org.eclipse.dltk.internal.core.ScriptProject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import org.fred.plugin.php.test.domain.ProjectFinder;
+import org.fred.plugin.php.test.domain.ProjectNotFoundException;
+import org.fred.plugin.php.test.domain.Runner;
 import org.fred.plugin.php.test.resource.ContentProvider;
 import org.fred.plugin.php.test.views.ResultView;
 
@@ -33,13 +39,23 @@ public class Handler extends AbstractHandler {
 			);
 			return null;
 		}
-		
-		runTests(unit, view);
+	
+		runTests(unit, view, event);
 		
 		return null;
 	}
 	
-	private void runTests(IModelElement unit, ResultView view) {
+	private void runTests(IModelElement unit, ResultView view, ExecutionEvent event) {
+		try {
+			ContentProvider.getInstance().add(new Runner().run(unit).toString());
+		} catch (Exception e) {
+			MessageDialog.openInformation(
+					HandlerUtil.getActiveShell(event),
+					"Information", 
+					e.getClass().toString() + ": "  + e.getMessage()
+			);
+		}
+		
 		ContentProvider.getInstance().add(unit.getResource().getLocation().toOSString());
 		
 		view.notifyChange();

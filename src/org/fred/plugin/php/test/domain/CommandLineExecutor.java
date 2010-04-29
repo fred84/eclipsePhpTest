@@ -1,6 +1,7 @@
 package org.fred.plugin.php.test.domain;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,12 +36,16 @@ class CommandLineExecutor {
 		}
 	}
 
-	String customCommand(String command) throws IOException, InterruptedException {
+	String customCommand(String[] command) throws IOException, InterruptedException {
 		return run(command);
 	}
 	
+	String customCommand(String[] command, File dir) throws IOException, InterruptedException {
+		return run(command, dir);
+	}
+	
 	String getVersion() throws IOException, InterruptedException {
-		String command = "phpunit --version"; 
+		String[] command = {"phpunit", "--version"}; 
 		
 		Pattern replace = Pattern.compile("(\\d+\\.\\d+\\.\\d+)");
 		Matcher matcher = replace.matcher(run(command));
@@ -52,10 +57,7 @@ class CommandLineExecutor {
 		return matcher.group();
 	}
 	
-	private String run(String command) throws IOException, InterruptedException {
-		// TODO add working directory as last parameter
-		Process process = Runtime.getRuntime().exec(command);
-
+	private String run(Process process) throws IOException, InterruptedException {
 		OutputBuffer stderr = new OutputBuffer(process.getErrorStream());         
 		OutputBuffer stdout = new OutputBuffer(process.getInputStream());       
 
@@ -69,5 +71,13 @@ class CommandLineExecutor {
 		}
 		
 		return stdout.getOutput();
+	}
+	
+	private String run(String[] command, File dir) throws IOException, InterruptedException {
+		return run(Runtime.getRuntime().exec(command, new String[0], dir));
+	}
+	
+	private String run(String[] command) throws IOException, InterruptedException {
+		return run(Runtime.getRuntime().exec(command));
 	}
 }

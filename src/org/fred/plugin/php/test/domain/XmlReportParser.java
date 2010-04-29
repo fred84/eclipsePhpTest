@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,8 +19,12 @@ import org.xml.sax.SAXException;
 class XmlReportParser implements IReportParser {
 
 	@Override
-	public List<TestSuite> parse(String xml) throws SAXException, IOException, ParserConfigurationException {
+	public List<TestSuite> parse(String xml) throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException {
         NodeList suitesNodes = getDocument(xml).getElementsByTagName("testsuite");
+        
+        if (0 == suitesNodes.getLength()) {
+        	throw new ResultsNotFoundException("no suites found in " + xml);
+        }
         
         List<TestSuite> suites =  new ArrayList<TestSuite>();
         
@@ -36,11 +42,22 @@ class XmlReportParser implements IReportParser {
 		return suites;		
 	}
 
-	private Document getDocument(String xml) throws SAXException, IOException, ParserConfigurationException {
+	private Document getDocument(String xml) throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException {
+		assertReportCorrect(xml);
+		
 		InputSource is = new InputSource();
         is.setCharacterStream(new StringReader(xml));
         
         return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+	}
+	
+	private void assertReportCorrect(String xml) throws ResultsNotFoundException {
+		Matcher junk = (Pattern.compile("^<.*")).matcher(xml.trim());
+		
+		if(!junk.matches()) {
+			throw new ResultsNotFoundException("incorrect xml: " + xml.trim());
+		}
+		
 	}
 	
 	private TestSuite createTestSuite(Node node) {
