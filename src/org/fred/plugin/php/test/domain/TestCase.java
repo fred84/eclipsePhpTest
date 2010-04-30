@@ -1,6 +1,6 @@
 package org.fred.plugin.php.test.domain;
 
-class TestCase {
+public class TestCase {
 
 	protected String name;
 	protected int line;

@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -35,7 +34,9 @@ class XmlReportParser implements IReportParser {
         	NodeList cases = suitesNodes.item(i).getChildNodes();
         	
         	for(int j = 0; j < cases.getLength(); j++) {
-        		suite.addCase(createTestCase(cases.item(j)));
+        		if (cases.item(j).getNodeName().equals("testcase")) {
+        			suite.addCase(createTestCase(cases.item(j)));
+        		}
         	}	
         }
 		
@@ -52,12 +53,11 @@ class XmlReportParser implements IReportParser {
 	}
 	
 	private void assertReportCorrect(String xml) throws ResultsNotFoundException {
-		Matcher junk = (Pattern.compile("^<.*")).matcher(xml.trim());
+		xml = xml.trim();
 		
-		if(!junk.matches()) {
+		if (!xml.startsWith("<?xml")) {
 			throw new ResultsNotFoundException("incorrect xml: " + xml.trim());
 		}
-		
 	}
 	
 	private TestSuite createTestSuite(Node node) {
@@ -67,12 +67,12 @@ class XmlReportParser implements IReportParser {
        	);
 	}
 	
-	private TestCase createTestCase(Node node) {
+	private TestCase createTestCase(Node node) throws NumberFormatException, DOMException, ResultsNotFoundException {
 		if (node.hasChildNodes()) {
 			return new FailedTestCase(
 				node.getAttributes().getNamedItem("name").getNodeValue(),
 				Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue()), 
-				node.getFirstChild().getTextContent()
+				getFailureText(node)
 			);
 		} else {
     		return new TestCase(
@@ -80,5 +80,17 @@ class XmlReportParser implements IReportParser {
     			Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue())
     		);
 		}
+	}
+	
+	private String getFailureText(Node node) throws ResultsNotFoundException {
+		NodeList nodes = node.getChildNodes();
+		
+		for (int i = 0; i < nodes.getLength(); i++) {
+			if (nodes.item(i).getNodeName().equals("failure")) {
+				return nodes.item(i).getTextContent();
+			}
+		}
+		
+		throw new ResultsNotFoundException("failure node not found");
 	}
 }

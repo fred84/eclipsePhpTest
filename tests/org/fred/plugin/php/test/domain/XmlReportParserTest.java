@@ -37,14 +37,14 @@ public class XmlReportParserTest {
 	
 	private String getTestResult() {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-		"<testsuites>" +
-		"<testsuite name=\"MyTestCase\" file=\"/test3/test/MyTestCase.php\" tests=\"2\" assertions=\"2\" failures=\"1\" errors=\"0\" time=\"0.001648\">" +
-		"<testcase name=\"testWillPass\" class=\"MyTestCase\" file=\"/test3/test/MyTestCase.php\" line=\"4\" assertions=\"1\" time=\"0.000827\"/>" +
-		"<testcase name=\"testWillFail\" class=\"MyTestCase\" file=\"/test3/test/MyTestCase.php\" line=\"8\" assertions=\"1\" time=\"0.000821\">" +
-		"<failure type=\"PHPUnit_Framework_ExpectationFailedException\">MyTestCase::testWillFail</failure>" +
-		"</testcase>" +
-		"</testsuite>" +
-		"</testsuites>";
+		"\n <testsuites>" +
+		"\n <testsuite name=\"MyTestCase\" file=\"/test3/test/MyTestCase.php\" tests=\"2\" assertions=\"2\" failures=\"1\" errors=\"0\" time=\"0.001648\">" +
+		"\n <testcase name=\"testWillPass\" class=\"MyTestCase\" file=\"/test3/test/MyTestCase.php\" line=\"4\" assertions=\"1\" time=\"0.000827\"/>" +
+		"\n <testcase name=\"testWillFail\" class=\"MyTestCase\" file=\"/test3/test/MyTestCase.php\" line=\"8\" assertions=\"1\" time=\"0.000821\">" +
+		"\n <failure type=\"PHPUnit_Framework_ExpectationFailedException\">MyTestCase::testWillFail</failure>" +
+		"\n </testcase>" +
+		"\n </testsuite>" +
+		"\n </testsuites>";
 	}
 	
 	private String getMalformedXml() {

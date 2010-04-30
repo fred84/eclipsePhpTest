@@ -32,7 +32,7 @@ public class Runner {
 		
 		File report = File.createTempFile("php-test-report", "xml");
 		
-		
+		// TODO how to refresh file contents
 		
 		String[] commands = {
 				"phpunit", 
@@ -44,9 +44,7 @@ public class Runner {
 		String xml = readFileAsString(new File(report.getAbsolutePath()));
 		
 		
-		
 		report.delete();
-		
 		
 		return new XmlReportParser().parse(xml);
 	}

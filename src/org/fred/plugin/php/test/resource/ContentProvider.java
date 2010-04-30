@@ -7,22 +7,14 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class ContentProvider implements IStructuredContentProvider {
 	
-	private static ContentProvider instance;
-	
 	private ArrayList<String> elements = new ArrayList<String>();
-	
-	static public synchronized ContentProvider getInstance() {
-		if (null == instance) {
-			instance = new ContentProvider();
-		}
-		
-		return instance;
-	}
-	
-	private ContentProvider() {}	
 	
 	public void add(String str) {
 		elements.add(str);
+	}
+	
+	public void clear() {
+		elements.clear();
 	}
 	
 	public void inputChanged(Viewer v, Object oldInput, Object newInput) {}

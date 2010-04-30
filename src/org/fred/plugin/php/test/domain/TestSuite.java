@@ -3,7 +3,7 @@ package org.fred.plugin.php.test.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-class TestSuite {
+public class TestSuite {
 
 	private String name;
 	private String path;
@@ -20,6 +20,10 @@ class TestSuite {
 	
 	public String toString() {
 		return name + " with " + cases;
+	}
+	
+	public List<TestCase> getCases() {
+		return cases;
 	}
 	
 	public boolean equals(Object other) {
