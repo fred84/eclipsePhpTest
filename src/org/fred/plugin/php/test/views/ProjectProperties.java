@@ -3,52 +3,61 @@ package org.fred.plugin.php.test.views;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.jface.preference.FileFieldEditor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.PropertyPage;
 
-public class ProjectProperties extends PropertyPage {
+public class ProjectProperties extends PropertyPage implements IPropertyChangeListener {
 
-	private static final String OWNER_PROPERTY = "OWNER";
-	private static final String DEFAULT_OWNER = "John Doe";
+	private static final String BOOTSTRAP = "BOOTSTRAP";
 
-	private Text ownerText;
-
-	public ProjectProperties() {
-		super();
-	}
-
+	private FieldEditor bootstrap;
+	
 	protected Control createContents(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		composite.setLayout(layout);
+		composite.setLayout(new GridLayout());
 		GridData data = new GridData(GridData.FILL);
 		data.grabExcessHorizontalSpace = true;
 		composite.setLayoutData(data);
 
+		bootstrap = new FileFieldEditor("bootstrap", "bootstrap", true, parent);
+		bootstrap.setPage(this);
+		bootstrap.setPropertyChangeListener(this);
+		bootstrap.setPreferenceStore(getPreferenceStore());
+		bootstrap.load();
+		
+		bootstrap.isValid();
+		
 		return composite;
 	}
 	
-	protected void performDefaults() {
-		// Populate the owner text field with the default value
-		ownerText.setText(DEFAULT_OWNER);
-	}
-	
 	public boolean performOk() {
-		// store the value in the owner text field
 		try {
 			((IResource) getElement()).setPersistentProperty(
-				new QualifiedName("", OWNER_PROPERTY),
-				ownerText.getText());
+					new QualifiedName("", BOOTSTRAP), 
+					"123"
+			);
 		} catch (CoreException e) {
 			return false;
 		}
 		return true;
 	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getProperty().equals(FieldEditor.IS_VALID)) {
+
+            setValid(bootstrap.isValid());
+           
+        }
+	}
+
 
 }

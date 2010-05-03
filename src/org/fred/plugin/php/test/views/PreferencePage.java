@@ -16,7 +16,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 		addField(new FileFieldEditor(
 				"executable", 
-				"PHPUnitPath", 
+				"PHPUnit path", 
 				true, 
 				getFieldEditorParent()
 				) 
