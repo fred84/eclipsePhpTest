@@ -55,10 +55,16 @@
             name="PHPUnit Preferences">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.fred.plugin.php.test.views.PreferenceInitializer">
-      </initializer>
+   <extension point="org.eclipse.core.runtime.preferences"/>
+   <extension point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.fred.plugin.php.test.views.ProjectProperties"
+            id="org.fred.plugin.php.test.views.ProjectProperties"
+            name="PHPUnit properties"
+            >
+			<enabledWhen>
+ 				<instanceof value="org.eclipse.dltk.core.IScriptProject"/>
+			</enabledWhen>
+      </page>
    </extension>
 </plugin>
