@@ -47,4 +47,18 @@
             name="PHPUnit results">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.fred.plugin.php.test.views.PreferencePage"
+            id="org.fred.plugin.php.test.views.PreferencePage"
+            name="PHPUnit Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.fred.plugin.php.test.views.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>
