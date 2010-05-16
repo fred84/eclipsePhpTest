@@ -1,8 +1,10 @@
 package org.fred.plugin.php.test.views;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.dltk.internal.core.ScriptProject;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -18,7 +20,9 @@ public class ProjectProperties extends PropertyPage implements IPropertyChangeLi
 
 	private static final String BOOTSTRAP = "BOOTSTRAP";
 
-	private FieldEditor bootstrap;
+	private QualifiedName fieldName = new QualifiedName(BOOTSTRAP, BOOTSTRAP); 
+	
+	private FileFieldEditor bootstrap;
 	
 	protected Control createContents(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -27,37 +31,76 @@ public class ProjectProperties extends PropertyPage implements IPropertyChangeLi
 		data.grabExcessHorizontalSpace = true;
 		composite.setLayoutData(data);
 
-		bootstrap = new FileFieldEditor("bootstrap", "bootstrap", true, parent);
-		bootstrap.setPage(this);
-		bootstrap.setPropertyChangeListener(this);
-		bootstrap.setPreferenceStore(getPreferenceStore());
-		bootstrap.load();
-		
-		bootstrap.isValid();
+		createBootstrapField(parent);
 		
 		return composite;
 	}
 	
+
+	
 	public boolean performOk() {
 		try {
-			((IResource) getElement()).setPersistentProperty(
-					new QualifiedName("", BOOTSTRAP), 
-					"123"
-			);
+			getProject().setPersistentProperty(fieldName, bootstrap.getStringValue());
 		} catch (CoreException e) {
 			return false;
 		}
+		
 		return true;
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		if (event.getProperty().equals(FieldEditor.IS_VALID)) {
-
             setValid(bootstrap.isValid());
-           
         }
 	}
+	
+	@SuppressWarnings("restriction")
+	private IProject getProject() {
+		return ((ScriptProject)getElement()).getProject();
+	}
+	
+	private String getBootstrapValue() {
+		String result;
+		
+		try {
+			result = getProject().getPersistentProperty(fieldName);
+		} catch (CoreException e) {
+			return "";
+		}
 
+		if (null == result) {
+			return "";
+		}
+		
+		return result;
+	}
+	
+	private void createBootstrapField(Composite parent) {
+		bootstrap = new FileFieldEditor("bootstrap", "bootstrap", false, createDefaultComposite(parent));
+		bootstrap.setPage(this);
+		
+		bootstrap.setPropertyChangeListener(this);
+//		
+//		bootstrap.setPreferenceStore(getPreferenceStore());
+//		bootstrap.load();
+		
+		bootstrap.setStringValue(getBootstrapValue());
+		
+		setValid(bootstrap.isValid());
+	}
+	
+	private Composite createDefaultComposite(Composite parent) {
+		Composite composite = new Composite(parent, SWT.NULL);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		composite.setLayout(layout);
 
+		GridData data = new GridData();
+		data.verticalAlignment = GridData.FILL;
+		data.horizontalAlignment = GridData.FILL;
+		composite.setLayoutData(data);
+
+		return composite;
+	}
 }
