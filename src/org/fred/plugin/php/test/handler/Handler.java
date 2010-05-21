@@ -3,13 +3,17 @@ package org.fred.plugin.php.test.handler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
-
+import org.fred.plugin.php.test.domain.PHPUnitCommand;
+import org.fred.plugin.php.test.domain.ProjectFinder;
+import org.fred.plugin.php.test.domain.ProjectNotFoundException;
 import org.fred.plugin.php.test.domain.Runner;
 import org.fred.plugin.php.test.views.ResultView;
 
@@ -20,7 +24,6 @@ public class Handler extends AbstractHandler {
 		ResultView view = getResultView(event);
 		
 		if (null == view) {
-			
 			return null;
 		}
 		
@@ -35,23 +38,34 @@ public class Handler extends AbstractHandler {
 			return null;
 		}
 
-
-		MessageDialog.openInformation(
-			HandlerUtil.getActiveShell(event),
-			"Phpunit", 
-			Platform.getPreferencesService().getString("PHPUnit_plugin", "executable", "nan", null)
-		);
+		String phpunit = Platform.getPreferencesService().getString("PHPUnit_plugin", "executable", null, null);
 		
+		if (null == phpunit) {
+			MessageDialog.openInformation(
+				HandlerUtil.getActiveShell(event),
+					"Information", 
+					"Please setup phpunit path in plugin preferences"
+			);
+			return null;
+		}
 		
-		
-		runTests(unit, view, event);
+		try {
+			runTests(new PHPUnitCommand(unit, ProjectFinder.getProject(unit), phpunit), view, event);
+		} catch (ProjectNotFoundException e) {
+			MessageDialog.openInformation(
+				HandlerUtil.getActiveShell(event),
+					"Information", 
+					e.getMessage()
+			);
+			return null;
+		}
 		
 		return null;
 	}
 	
-	private void runTests(IModelElement unit, ResultView view, ExecutionEvent event) {
+	private void runTests(PHPUnitCommand command, ResultView view, ExecutionEvent event) {
 		try {
-			view.notifyChange(new Runner().run(unit));
+			view.notifyChange(new Runner().run(command));
 		} catch (Exception e) {
 			MessageDialog.openInformation(
 					HandlerUtil.getActiveShell(event),
@@ -59,8 +73,6 @@ public class Handler extends AbstractHandler {
 					e.getClass().toString() + ": "  + e.getMessage() + "; " + e.getStackTrace().toString()
 			);
 		}
-		
-		//ContentProvider.getInstance().add(unit.getResource().getLocation().toOSString());
 	}
 	
 	private ResultView getResultView(ExecutionEvent event) {

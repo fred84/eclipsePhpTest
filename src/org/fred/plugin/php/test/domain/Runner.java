@@ -7,43 +7,17 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.IScriptFolder;
-import org.eclipse.dltk.core.IScriptProject;
-import org.eclipse.dltk.core.ISourceModule;
 import org.xml.sax.SAXException;
 
-
 public class Runner {
-	
+
 	private CommandLineExecutor exec = new CommandLineExecutor();
 	
-	public List<TestSuite> run(IModelElement unit) throws ProjectNotFoundException, IOException, InterruptedException, SAXException, ParserConfigurationException, ResultsNotFoundException {
-		if (!(unit instanceof ISourceModule || unit instanceof IScriptFolder)) {
-			throw new RuntimeException("invalid argument");
-		}
-		
-		IScriptProject project = ProjectFinder.getProject(unit);
-		
-		IPath projectDir = project.getResource().getLocation();
-		IPath testDir = unit.getResource().getLocation().makeRelativeTo(projectDir);
-		
+	public List<TestSuite> run(PHPUnitCommand command) throws ProjectNotFoundException, IOException, InterruptedException, SAXException, ParserConfigurationException, ResultsNotFoundException {
 		File report = File.createTempFile("php-test-report", "xml");
-		
-		// TODO how to refresh file contents
-		
-		String[] commands = {
-				"phpunit", 
-				"--log-junit=" + report.getAbsolutePath(),
-				testDir.toOSString()
-		};
-		exec.customCommand(commands, projectDir.toFile());
-		
+	
+		exec.customCommand(command.toCommand(report), command.getWorkingDirectory());
 		String xml = readFileAsString(new File(report.getAbsolutePath()));
-		
-		
 		report.delete();
 		
 		return new XmlReportParser().parse(xml);

@@ -1,10 +1,9 @@
 package org.fred.plugin.php.test.views;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.dltk.internal.core.ScriptProject;
+import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -36,8 +35,6 @@ public class ProjectProperties extends PropertyPage implements IPropertyChangeLi
 		return composite;
 	}
 	
-
-	
 	public boolean performOk() {
 		try {
 			getProject().setPersistentProperty(fieldName, bootstrap.getStringValue());
@@ -54,10 +51,9 @@ public class ProjectProperties extends PropertyPage implements IPropertyChangeLi
             setValid(bootstrap.isValid());
         }
 	}
-	
-	@SuppressWarnings("restriction")
+
 	private IProject getProject() {
-		return ((ScriptProject)getElement()).getProject();
+		return ((IScriptProject)getElement()).getProject();
 	}
 	
 	private String getBootstrapValue() {
@@ -81,10 +77,6 @@ public class ProjectProperties extends PropertyPage implements IPropertyChangeLi
 		bootstrap.setPage(this);
 		
 		bootstrap.setPropertyChangeListener(this);
-//		
-//		bootstrap.setPreferenceStore(getPreferenceStore());
-//		bootstrap.load();
-		
 		bootstrap.setStringValue(getBootstrapValue());
 		
 		setValid(bootstrap.isValid());
