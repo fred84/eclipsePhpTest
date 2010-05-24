@@ -31,7 +31,7 @@ public class PHPUnitCommand {
 		if (null != getBootstrap()) {
 			return new String[] {
 				executable, 
-				//"--bootstrap=" + getBootstrap().toOSString(),
+				"--bootstrap=" + getBootstrap().toOSString(),
 				"--log-junit=" + report.getAbsolutePath(),
 				getTestPath().toOSString()
 			};

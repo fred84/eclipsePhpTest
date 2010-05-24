@@ -14,6 +14,10 @@ public class TestSuite {
 		this.path = path;
 	}
 	
+	TestSuite(String name) {
+		this.name = name;
+	}
+	
 	void addCase(TestCase testCase) {
 		cases.add(testCase);
 	}
@@ -35,6 +39,10 @@ public class TestSuite {
 		
 		if (!name.equals(obj.name)) {
 			return false;
+		}
+		
+		if (null == path && null == obj.path) {
+			return true;
 		}
 		
 		if (!path.equals(obj.path)) {
