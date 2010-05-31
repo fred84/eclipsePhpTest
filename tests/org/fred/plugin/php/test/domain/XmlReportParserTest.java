@@ -19,16 +19,16 @@ public class XmlReportParserTest {
 		TestSuite suite = new TestSuite("MyTestCase", "/test3/test/MyTestCase.php");
 		suite.addCase(new TestCase("testWillPass", 4));
 		suite.addCase(new FailedTestCase("testWillFail", 8, "MyTestCase::testWillFail"));	
-		List<TestSuite> expected = new ArrayList<TestSuite>();
-		expected.add(suite);
+		TestSuites expected = new TestSuites();
+		expected.addSuite(suite);
 		// verify
 		assertEquals(expected, new XmlReportParser().parse(getTestResult()));
 	}
 
 	@Test
 	public void parseEmptyResults() throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException {
-		ArrayList<TestSuite> expected = new ArrayList<TestSuite>();
-		expected.add(new TestSuite("fold"));
+		TestSuites expected = new TestSuites();
+		expected.addSuite(new TestSuite("fold"));
 		assertEquals(expected, new XmlReportParser().parse(getEmptyResult()));
 	}
 	

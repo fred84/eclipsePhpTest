@@ -24,4 +24,9 @@ class FailedTestCase extends TestCase {
 	public String toString() {
 		return super.toString() + " '" + description + "'";
 	}
+	
+	@Override
+	public boolean isFailed() {
+		return true;
+	}
 }

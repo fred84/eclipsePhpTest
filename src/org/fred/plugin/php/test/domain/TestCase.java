@@ -1,6 +1,8 @@
 package org.fred.plugin.php.test.domain;
 
-public class TestCase {
+import java.util.List;
+
+public class TestCase implements IResultsComposite {
 
 	protected String name;
 	protected int line;
@@ -26,5 +28,15 @@ public class TestCase {
 	
 	public String toString() {
 		return name + " at " + line;
+	}
+
+	@Override
+	public List<IResultsComposite> getChilden() {
+		return null;
+	}
+
+	@Override
+	public boolean isFailed() {
+		return false;
 	}
 }

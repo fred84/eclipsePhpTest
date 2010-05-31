@@ -1,14 +1,12 @@
 package org.fred.plugin.php.test.views;
 
-import java.util.List;
-
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 
-import org.fred.plugin.php.test.domain.TestCase;
-import org.fred.plugin.php.test.domain.TestSuite;
+import org.fred.plugin.php.test.domain.IResultsComposite;
+import org.fred.plugin.php.test.domain.TestSuites;
 import org.fred.plugin.php.test.resource.ContentProvider;
 
 public class ResultView extends ViewPart {
@@ -31,11 +29,11 @@ public class ResultView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	public void notifyChange(List<TestSuite> suites) {
+	public void notifyChange(TestSuites suites) {
 		provider.clear();
 		
-		for(TestSuite suite: suites) {
-			for (TestCase c: suite.getCases()) {
+		for(IResultsComposite suite: suites.getChilden()) {
+			for (IResultsComposite c: suite.getChilden()) {
 				provider.add(c.toString());
 			}
 		}

@@ -2,8 +2,6 @@ package org.fred.plugin.php.test.domain;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,7 +16,7 @@ import org.xml.sax.SAXException;
 class XmlReportParser implements IReportParser {
 
 	@Override
-	public List<TestSuite> parse(String xml) throws SAXException, IOException,
+	public TestSuites parse(String xml) throws SAXException, IOException,
 			ParserConfigurationException, ResultsNotFoundException {
 		NodeList suitesNodes = getDocument(xml).getElementsByTagName(
 				"testsuite");
@@ -27,11 +25,11 @@ class XmlReportParser implements IReportParser {
 			throw new ResultsNotFoundException("no suites found in " + xml);
 		}
 
-		List<TestSuite> suites = new ArrayList<TestSuite>();
+		TestSuites suites = new TestSuites();
 
 		for (int i = 0; i < suitesNodes.getLength(); i++) {
 			TestSuite suite = createTestSuite(suitesNodes.item(i));
-			suites.add(suite);
+			suites.addSuite(suite);
 
 			NodeList cases = suitesNodes.item(i).getChildNodes();
 

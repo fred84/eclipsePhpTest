@@ -1,13 +1,9 @@
 package org.fred.plugin.php.test.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TestSuite {
+public class TestSuite extends ResultComposite {
 
 	private String name;
 	private String path;
-	private List<TestCase> cases = new ArrayList<TestCase>();
 	
 	TestSuite(String name, String path) {
 		this.name = name;
@@ -19,16 +15,13 @@ public class TestSuite {
 	}
 	
 	void addCase(TestCase testCase) {
-		cases.add(testCase);
+		children.add(testCase);
 	}
 	
 	public String toString() {
-		return name + " with " + cases;
+		return name + " with " + children;
 	}
-	
-	public List<TestCase> getCases() {
-		return cases;
-	}
+
 	
 	public boolean equals(Object other) {
 		if (!(other instanceof TestSuite)) {
@@ -49,17 +42,6 @@ public class TestSuite {
 			return false;
 		}
 		
-		return cases.equals(obj.cases);
-	}
-
-	List<FailedTestCase> getFailedTestCases() {
-		List <FailedTestCase> failed = new ArrayList<FailedTestCase>();
-		
-		for (TestCase testCase: cases) {
-			if (testCase instanceof FailedTestCase) {
-				failed.add((FailedTestCase)testCase);
-			}
-		}
-		return failed;
+		return children.equals(obj.children);
 	}
 }

@@ -24,6 +24,6 @@ public class CommandLineExecutorTest {
 	
 	@Test
 	public void getVersion() throws IOException, InterruptedException {
-		assertEquals("3.4.11", executor.getVersion());
+		assertEquals("3.4.13", executor.getVersion());
 	}
 }
