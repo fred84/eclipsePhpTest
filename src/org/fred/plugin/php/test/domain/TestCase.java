@@ -2,6 +2,8 @@ package org.fred.plugin.php.test.domain;
 
 import java.util.List;
 
+import org.fred.plugin.php.test.Activator;
+
 public class TestCase implements IResultsComposite {
 
 	protected String name;
@@ -38,5 +40,15 @@ public class TestCase implements IResultsComposite {
 	@Override
 	public boolean isFailed() {
 		return false;
+	}
+
+	@Override
+	public String getImageName() {
+		return Activator.IMAGE_PASS;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

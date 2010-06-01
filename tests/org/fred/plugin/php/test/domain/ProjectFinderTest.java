@@ -1,11 +1,5 @@
 package org.fred.plugin.php.test.domain;
 
-import org.eclipse.core.internal.resources.Project;
-import org.eclipse.dltk.internal.core.ProjectFragment;
-import org.eclipse.dltk.internal.core.ScriptFolder;
-import org.eclipse.dltk.internal.core.ScriptFolderInfo;
-import org.eclipse.dltk.internal.core.ScriptProject;
-import org.eclipse.dltk.internal.core.SourceModule;
 import org.junit.Test;
 
 

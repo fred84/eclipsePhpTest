@@ -1,7 +1,5 @@
 package org.fred.plugin.php.test.domain;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 
 import org.junit.Before;
@@ -20,10 +18,5 @@ public class CommandLineExecutorTest {
 	public void customCommand_incorrect() throws IOException, InterruptedException {
 		String[] command = {"phpunit12345"};
 		executor.customCommand(command);
-	}
-	
-	@Test
-	public void getVersion() throws IOException, InterruptedException {
-		assertEquals("3.4.13", executor.getVersion());
 	}
 }

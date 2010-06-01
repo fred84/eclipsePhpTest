@@ -8,4 +8,8 @@ public interface IResultsComposite {
 	
 	public List<IResultsComposite> getChilden();
 	
+	public String getImageName();
+	
+	public String getName();
+	
 }

@@ -14,6 +14,11 @@ public class TestSuite extends ResultComposite {
 		this.name = name;
 	}
 	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
 	void addCase(TestCase testCase) {
 		children.add(testCase);
 	}

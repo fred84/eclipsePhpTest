@@ -6,6 +6,11 @@ public class TestSuites extends ResultComposite {
 		children.add(suite);
 	}
 	
+	@Override
+	public String getName() {
+		return "suite";
+	}
+	
 	public String toString() {
 		return children.toString();
 	}

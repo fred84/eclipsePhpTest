@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fred.plugin.php.test.Activator;
 import org.junit.Test;
 
 
@@ -41,5 +42,21 @@ public class TestSuiteTest {
 		suite.addCase(passed);
 		
 		assertFalse(suite.isFailed());
+	}
+	
+	@Test
+	public void getImageName_failed() {
+		TestSuite suite = new TestSuite("name", "path");
+		suite.addCase(failed);
+		
+		assertEquals(Activator.IMAGE_FAIL, suite.getImageName());
+	}
+
+	@Test
+	public void getImageName_passed() {
+		TestSuite suite = new TestSuite("name", "path");
+		suite.addCase(passed);
+		
+		assertEquals(Activator.IMAGE_PASS, suite.getImageName());
 	}
 }

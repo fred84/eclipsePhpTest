@@ -3,6 +3,8 @@ package org.fred.plugin.php.test.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fred.plugin.php.test.Activator;
+
 public abstract class ResultComposite implements IResultsComposite {
 
 	protected List<IResultsComposite> children = new ArrayList<IResultsComposite>();
@@ -19,5 +21,10 @@ public abstract class ResultComposite implements IResultsComposite {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public String getImageName() {
+		return isFailed() ? Activator.IMAGE_FAIL : Activator.IMAGE_PASS;
 	}
 }

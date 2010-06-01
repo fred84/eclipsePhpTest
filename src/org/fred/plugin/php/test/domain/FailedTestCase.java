@@ -1,5 +1,7 @@
 package org.fred.plugin.php.test.domain;
 
+import org.fred.plugin.php.test.Activator;
+
 class FailedTestCase extends TestCase {
 
 	private String description;
@@ -28,5 +30,10 @@ class FailedTestCase extends TestCase {
 	@Override
 	public boolean isFailed() {
 		return true;
+	}
+	
+	@Override
+	public String getImageName() {
+		return Activator.IMAGE_FAIL;
 	}
 }

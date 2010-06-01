@@ -7,20 +7,19 @@ import org.eclipse.swt.SWT;
 
 import org.fred.plugin.php.test.domain.IResultsComposite;
 import org.fred.plugin.php.test.domain.TestSuites;
-import org.fred.plugin.php.test.resource.ContentProvider;
 
 public class ResultView extends ViewPart {
 
 	public static final String ID = "org.fred.plugin.php.test.views.ResultView";
 
-	private TableViewer viewer;
+	private TreeViewer viewer;
 
-	private ContentProvider provider = new ContentProvider();
+	private TreeContentProvider provider = new TreeContentProvider();
 	
 	public void createPartControl(Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		viewer.setContentProvider(provider);
-		viewer.setLabelProvider(new LabelProvider());
+		viewer.setLabelProvider(new ResultsLabelProvider());
 		viewer.setSorter(new ViewerSorter());
 		viewer.setInput(getViewSite());
 	}
@@ -33,9 +32,7 @@ public class ResultView extends ViewPart {
 		provider.clear();
 		
 		for(IResultsComposite suite: suites.getChilden()) {
-			for (IResultsComposite c: suite.getChilden()) {
-				provider.add(c.toString());
-			}
+			provider.add(suite);
 		}
 		
 		viewer.refresh();
