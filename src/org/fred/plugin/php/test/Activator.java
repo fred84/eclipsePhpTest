@@ -14,7 +14,6 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_PASS = "pass";
 	public static final String IMAGE_FAIL = "fail";
 	
-	// The shared instance
 	private static Activator plugin;
 	
 	private Bundle bundle;
