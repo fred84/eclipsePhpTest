@@ -5,6 +5,10 @@ import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -16,26 +20,25 @@ import org.xml.sax.SAXException;
 class XmlReportParser implements IReportParser {
 
 	@Override
-	public TestSuites parse(String xml) throws SAXException, IOException,
-			ParserConfigurationException, ResultsNotFoundException {
-		NodeList suitesNodes = getDocument(xml).getElementsByTagName(
-				"testsuite");
-
-		if (0 == suitesNodes.getLength()) {
-			throw new ResultsNotFoundException("no suites found in " + xml);
-		}
-
-		TestSuites suites = new TestSuites();
-
+	public TestSuites parse(String xml) throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException, XPathExpressionException {
+	    XPathExpression expr = XPathFactory
+	    	.newInstance()
+	    	.newXPath()
+	    	.compile("//testsuite[@file]");
+	    
+	    NodeList suitesNodes = (NodeList)expr.evaluate(getDocument(xml), XPathConstants.NODESET);
+		
+	    TestSuites suites = new TestSuites();
+		
 		for (int i = 0; i < suitesNodes.getLength(); i++) {
 			TestSuite suite = createTestSuite(suitesNodes.item(i));
-			suites.addSuite(suite);
+			suites.add(suite);
 
 			NodeList cases = suitesNodes.item(i).getChildNodes();
 
 			for (int j = 0; j < cases.getLength(); j++) {
 				if (cases.item(j).getNodeName().equals("testcase")) {
-					suite.addCase(createTestCase(cases.item(j)));
+					suite.add(createTestCase(cases.item(j)));
 				}
 			}
 		}

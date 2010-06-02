@@ -6,13 +6,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
 import org.xml.sax.SAXException;
 
 public class Runner {
 
 	private CommandLineExecutor exec = new CommandLineExecutor();
 	
-	public TestSuites run(PHPUnitCommand command) throws ProjectNotFoundException, IOException, InterruptedException, SAXException, ParserConfigurationException, ResultsNotFoundException {
+	public TestSuites run(PHPUnitCommand command) throws ProjectNotFoundException, IOException, InterruptedException, SAXException, ParserConfigurationException, ResultsNotFoundException, XPathExpressionException {
 		File report = File.createTempFile("php-test-report", "xml");
 
 		exec.customCommand(command.toCommand(report), command.getWorkingDirectory());

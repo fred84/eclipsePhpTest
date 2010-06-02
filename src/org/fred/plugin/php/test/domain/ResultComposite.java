@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.fred.plugin.php.test.Activator;
 
-public abstract class ResultComposite implements IResultsComposite {
+abstract class ResultComposite implements IResultsComposite {
 
 	protected List<IResultsComposite> children = new ArrayList<IResultsComposite>();
+	
+	protected IResultsComposite parent;
 	
 	public List<IResultsComposite> getChilden() {
 		return children;
@@ -26,5 +28,19 @@ public abstract class ResultComposite implements IResultsComposite {
 	@Override
 	public String getImageName() {
 		return isFailed() ? Activator.IMAGE_FAIL : Activator.IMAGE_PASS;
+	}
+	
+	@Override
+	public boolean hasChildren() {
+		return children.size() > 0;
+	}
+	
+	@Override
+	public IResultsComposite getParent() {
+		return parent;
+	}
+	
+	void setParent(IResultsComposite parent) {
+		this.parent = parent;
 	}
 }

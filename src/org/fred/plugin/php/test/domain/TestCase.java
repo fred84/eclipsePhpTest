@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.fred.plugin.php.test.Activator;
 
-public class TestCase implements IResultsComposite {
+class TestCase implements IResultsComposite {
 
 	protected String name;
 	protected int line;
+	protected IResultsComposite parent;
 	
 	TestCase(String name, int line) {
 		this.name = name;
@@ -50,5 +51,19 @@ public class TestCase implements IResultsComposite {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public boolean hasChildren() {
+		return false;
+	}
+
+	@Override
+	public IResultsComposite getParent() {
+		return parent;
+	}
+	
+	void setParent(IResultsComposite parent) {
+		this.parent = parent;
 	}
 }

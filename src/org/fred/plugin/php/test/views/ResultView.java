@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 
 import org.fred.plugin.php.test.domain.IResultsComposite;
-import org.fred.plugin.php.test.domain.TestSuites;
 
 public class ResultView extends ViewPart {
 
@@ -28,7 +27,7 @@ public class ResultView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	public void notifyChange(TestSuites suites) {
+	public void notifyChange(IResultsComposite suites) {
 		provider.clear();
 		
 		for(IResultsComposite suite: suites.getChilden()) {

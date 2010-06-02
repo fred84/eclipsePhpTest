@@ -16,8 +16,8 @@ public class TestSuitesTest {
 	@Test
 	public void getChildren() {
 		TestSuites suites = new TestSuites();
-		suites.addSuite(withFailedCases());
-		suites.addSuite(withPassedCases());
+		suites.add(withFailedCases());
+		suites.add(withPassedCases());
 		
 		List<IResultsComposite> expected = new ArrayList<IResultsComposite>();
 		expected.add(withFailedCases());
@@ -29,7 +29,7 @@ public class TestSuitesTest {
 	@Test
 	public void isFailed_true() {
 		TestSuites suites = new TestSuites();
-		suites.addSuite(withFailedCases());
+		suites.add(withFailedCases());
 		
 		assertTrue(suites.isFailed());
 	}
@@ -37,20 +37,20 @@ public class TestSuitesTest {
 	@Test
 	public void isFailed_false() {
 		TestSuites suites = new TestSuites();
-		suites.addSuite(withPassedCases());
+		suites.add(withPassedCases());
 		
 		assertFalse(suites.isFailed());
 	}
 	
 	TestSuite withPassedCases() {
 		TestSuite suite = new TestSuite("name", "path");
-		suite.addCase(passed);
+		suite.add(passed);
 		return suite;
 	}
 	
 	TestSuite withFailedCases() {
 		TestSuite suite = new TestSuite("name", "path");
-		suite.addCase(failed);
+		suite.add(failed);
 		return suite;
 	}
 }

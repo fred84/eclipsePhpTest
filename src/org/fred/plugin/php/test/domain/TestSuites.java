@@ -1,8 +1,9 @@
 package org.fred.plugin.php.test.domain;
 
-public class TestSuites extends ResultComposite {
+class TestSuites extends ResultComposite {
 
-	void addSuite(TestSuite suite) {
+	void add(TestSuite suite) {
+		suite.setParent(this);
 		children.add(suite);
 	}
 	

@@ -25,13 +25,12 @@ public class TreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object element) {
-		// TODO Auto-generated method stub
-		return null;
+		return ((IResultsComposite)element).getParent();
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		return getChildren(element).length > 0;
+		return ((IResultsComposite)element).hasChildren();
 	}
 
 	@Override

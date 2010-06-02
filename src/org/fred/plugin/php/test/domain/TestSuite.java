@@ -1,6 +1,6 @@
 package org.fred.plugin.php.test.domain;
 
-public class TestSuite extends ResultComposite {
+class TestSuite extends ResultComposite {
 
 	private String name;
 	private String path;
@@ -13,20 +13,20 @@ public class TestSuite extends ResultComposite {
 	TestSuite(String name) {
 		this.name = name;
 	}
+
+	void add(TestCase testCase) {
+		testCase.setParent(this);
+		children.add(testCase);
+	}
 	
 	@Override
 	public String getName() {
 		return name;
 	}
 	
-	void addCase(TestCase testCase) {
-		children.add(testCase);
-	}
-	
 	public String toString() {
 		return name + " with " + children;
 	}
-
 	
 	public boolean equals(Object other) {
 		if (!(other instanceof TestSuite)) {
