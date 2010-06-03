@@ -27,6 +27,7 @@ class FailedTestCase extends TestCase {
 		return super.toString() + " '" + description + "'";
 	}
 	
+	
 	@Override
 	public boolean isFailed() {
 		return true;
@@ -35,5 +36,10 @@ class FailedTestCase extends TestCase {
 	@Override
 	public String getImageName() {
 		return Activator.IMAGE_FAIL;
+	}
+	
+	@Override
+	public String getDescription() {
+		return description;
 	}
 }

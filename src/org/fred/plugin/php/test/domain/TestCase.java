@@ -63,6 +63,11 @@ class TestCase implements IResultsComposite {
 		return parent;
 	}
 	
+	@Override
+	public String getDescription() {
+		return null;
+	}
+	
 	void setParent(IResultsComposite parent) {
 		this.parent = parent;
 	}

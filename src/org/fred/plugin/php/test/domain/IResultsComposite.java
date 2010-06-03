@@ -15,4 +15,6 @@ public interface IResultsComposite {
 	public String getName();
 	
 	public IResultsComposite getParent();
+	
+	public String getDescription();
 }
