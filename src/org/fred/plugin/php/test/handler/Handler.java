@@ -14,6 +14,7 @@ import org.fred.plugin.php.test.domain.ProjectFinder;
 import org.fred.plugin.php.test.domain.ProjectNotFoundException;
 import org.fred.plugin.php.test.domain.Runner;
 import org.fred.plugin.php.test.views.ResultView;
+import org.eclipse.php.internal.core.documentModel.dom.IImplForPhp;
 
 public class Handler extends AbstractHandler {
 
@@ -93,9 +94,16 @@ public class Handler extends AbstractHandler {
 	private IModelElement getSelection(ExecutionEvent event) {
 		IStructuredSelection selection = 
 			(IStructuredSelection) HandlerUtil.getActiveMenuSelection(event);
-	
+
 		try {
-			return (IModelElement)selection.getFirstElement();
+			Object elem = selection.getFirstElement();
+			
+			// dependency on internal pdt class
+			if (elem instanceof IImplForPhp) {
+				return ((IImplForPhp)elem).getModelElement();
+			} 
+			
+			return (IModelElement)elem;
 		} catch (Exception e) {
 			// TODO notify user about bad selection
 			return null;
