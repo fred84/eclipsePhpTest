@@ -39,9 +39,7 @@ public class ResultView extends ViewPart {
 		});
 	}
 
-	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
+	public void setFocus() {}
 
 	public void notifyChange(IResultsComposite suites) {
 		provider.clear();
