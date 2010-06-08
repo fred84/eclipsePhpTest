@@ -23,10 +23,10 @@
       </menuContribution>
    </extension>
     <extension point="org.eclipse.ui.menus">
-       <menuContribution locationURI="popup:org.eclipse.ui.popup.any">
+       <menuContribution locationURI="popup:org.eclipse.php.core.phpsource.source.EditorContext">
          <command
                commandId="org.fred.plugin.php.test.runtests"
-               label="Run PHPUnit (test)"
+               label="Run PHPUnit"
                style="push">
          </command>
       </menuContribution>
