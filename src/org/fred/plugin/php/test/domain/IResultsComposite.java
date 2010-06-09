@@ -17,4 +17,6 @@ public interface IResultsComposite {
 	public IResultsComposite getParent();
 	
 	public String getDescription();
+	
+	public List<IResultsComposite> getFailedChildren();
 }

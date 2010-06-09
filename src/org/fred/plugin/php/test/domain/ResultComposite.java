@@ -14,6 +14,17 @@ abstract class ResultComposite implements IResultsComposite {
 	public List<IResultsComposite> getChilden() {
 		return children;
 	}
+	
+	public List<IResultsComposite> getFailedChildren() {
+		List<IResultsComposite> result = new ArrayList<IResultsComposite>();
+		for (IResultsComposite child : children) {
+			if (child.isFailed()) {
+				result.add(child);
+			}
+		}
+		
+		return result;
+	}
 
 	public boolean isFailed() {
 		for(IResultsComposite child: children) {

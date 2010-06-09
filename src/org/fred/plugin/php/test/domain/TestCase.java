@@ -1,5 +1,6 @@
 package org.fred.plugin.php.test.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.fred.plugin.php.test.Activator;
@@ -35,7 +36,7 @@ class TestCase implements IResultsComposite {
 
 	@Override
 	public List<IResultsComposite> getChilden() {
-		return null;
+		return new ArrayList<IResultsComposite>();
 	}
 
 	@Override
@@ -70,5 +71,10 @@ class TestCase implements IResultsComposite {
 	
 	void setParent(IResultsComposite parent) {
 		this.parent = parent;
+	}
+
+	@Override
+	public List<IResultsComposite> getFailedChildren() {
+		return new ArrayList<IResultsComposite>();
 	}
 }

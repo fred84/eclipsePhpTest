@@ -68,4 +68,16 @@ public class TestSuiteTest {
 		
 		assertEquals(Activator.IMAGE_PASS, suite.getImageName());
 	}
+	
+	@Test
+	public void getFailedChildren() {
+		TestSuite suite = new TestSuite("name", "path");
+		suite.add(failed);
+		suite.add(passed);
+		
+		List<IResultsComposite> expected = new ArrayList<IResultsComposite>();
+		expected.add(failed);
+
+		assertEquals(expected, suite.getFailedChildren());
+	}
 }

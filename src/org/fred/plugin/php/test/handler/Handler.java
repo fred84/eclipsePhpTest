@@ -11,6 +11,7 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.php.internal.core.documentModel.dom.IImplForPhp;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.fred.plugin.php.test.domain.PHPUnitCommand;
@@ -74,7 +75,7 @@ public class Handler extends AbstractHandler {
 	private ResultView getResultView(ExecutionEvent event) {
 		try {
 			return (ResultView) HandlerUtil.getActiveWorkbenchWindow(event)
-					.getActivePage().showView(ResultView.ID);
+					.getActivePage().showView(ResultView.ID, null, IWorkbenchPage.VIEW_VISIBLE);
 
 		} catch (PartInitException e) {
 			MessageDialog.openError(HandlerUtil.getActiveShell(event), "Error",

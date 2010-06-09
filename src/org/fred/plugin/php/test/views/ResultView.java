@@ -25,7 +25,6 @@ public class ResultView extends ViewPart {
 		viewer.setInput(getViewSite());
 		
 		description = new Label(parent, SWT.READ_ONLY);
-		description.setText("jaja");
 		
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -49,5 +48,7 @@ public class ResultView extends ViewPart {
 		}
 		
 		viewer.refresh();
+		
+		viewer.setExpandedElements(suites.getFailedChildren().toArray());
 	}
 }
