@@ -33,7 +33,13 @@ public class PHPUnitPlugin extends AbstractUIPlugin {
 	}
 	
 	protected void initializeImageRegistry(ImageRegistry registry) {
-		registry.put(Images.IMAGE_PASS, ImageDescriptor.createFromURL(bundle.getEntry("icons/pass.gif")));
-		registry.put(Images.IMAGE_FAIL, ImageDescriptor.createFromURL(bundle.getEntry("icons/fail.gif")));
+		registry.put(
+				Images.IMAGE_PASS, 
+				ImageDescriptor.createFromURL(bundle.getEntry(Images.getImagePath(Images.IMAGE_PASS)))
+		);
+		registry.put(
+				Images.IMAGE_FAIL, 
+				ImageDescriptor.createFromURL(bundle.getEntry(Images.getImagePath(Images.IMAGE_FAIL)))
+		);
 	}
 }
