@@ -6,7 +6,7 @@
       <menuContribution
             locationURI="popup:org.eclipse.php.ui.explorer">
          <command
-               commandId="org.fred.plugin.php.test.runtests"
+               commandId="me.galkin.eclipse.php.runtests"
                label="Run PHPUnit"
                style="push">
 			<visibleWhen>
@@ -23,7 +23,7 @@
       </menuContribution>
        <menuContribution locationURI="popup:org.eclipse.php.core.phpsource.source.EditorContext">
          <command
-               commandId="org.fred.plugin.php.test.runtests"
+               commandId="me.galkin.eclipse.php.runtests"
                label="Run PHPUnit"
                style="push">
          </command>
@@ -31,44 +31,44 @@
    </extension>
    <extension point="org.eclipse.ui.bindings">
    		<key sequence="M1+M2+D" 
-   		commandId="org.fred.plugin.php.test.runtests"
+   		commandId="me.galkin.eclipse.php.runtests"
    		schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
   		/>
 	</extension>
    
    <extension point="org.eclipse.ui.commands">
       <command
-            id="org.fred.plugin.php.test.runtests"
+            id="me.galkin.eclipse.php.runtests"
             name="Handler">
       </command>
    </extension>
    <extension point="org.eclipse.ui.handlers">
       <handler
-            class="org.fred.plugin.php.test.handler.Handler"
-            commandId="org.fred.plugin.php.test.runtests">
+            class="me.galkin.eclipse.php.handler.Handler"
+            commandId="me.galkin.eclipse.php.runtests">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="org.fred.plugin.php.test.views.ResultView"
-            id="org.fred.plugin.php.test.views.ResultView"
+            class="me.galkin.eclipse.php.ui.ResultView"
+            id="me.galkin.eclipse.php.ui.ResultView"
             name="PHPUnit results">
       </view>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.fred.plugin.php.test.views.PreferencePage"
-            id="org.fred.plugin.php.test.views.PreferencePage"
+            class="me.galkin.eclipse.php.ui.PreferencePage"
+            id="me.galkin.eclipse.php.ui.PreferencePage"
             name="PHPUnit Preferences">
       </page>
    </extension>
    <extension point="org.eclipse.core.runtime.preferences"/>
    <extension point="org.eclipse.ui.propertyPages">
       <page
-            class="org.fred.plugin.php.test.views.ProjectProperties"
-            id="org.fred.plugin.php.test.views.ProjectProperties"
+            class="me.galkin.eclipse.php.ui.ProjectProperties"
+            id="me.galkin.eclipse.php.ui.ProjectProperties"
             name="PHPUnit properties"
             >
 			<enabledWhen>

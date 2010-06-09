@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PHPUnit_plugin
 Bundle-SymbolicName: PHPUnit_plugin;singleton:=true
 Bundle-Version: 0.0.1
-Bundle-Activator: org.fred.plugin.php.test.Activator
+Bundle-Activator: me.galkin.eclipse.php.PHPUnitPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.dltk.core;bundle-version="1.0.2",
