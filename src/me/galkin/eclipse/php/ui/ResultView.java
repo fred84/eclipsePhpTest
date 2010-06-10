@@ -1,6 +1,10 @@
 package me.galkin.eclipse.php.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.galkin.eclipse.php.domain.IResultsComposite;
+import me.galkin.eclipse.php.utils.ResultSelector;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -51,5 +55,9 @@ public class ResultView extends ViewPart {
 		viewer.refresh();
 		
 		viewer.setExpandedElements(suites.getFailedChildren().toArray());
+
+		if (suites.isFailed()) {
+			viewer.setSelection(new StructuredSelection(ResultSelector.firstFailed(suites)));
+		}
 	}
 }
