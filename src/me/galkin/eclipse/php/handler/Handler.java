@@ -2,6 +2,7 @@ package me.galkin.eclipse.php.handler;
 
 import java.util.List;
 
+import me.galkin.eclipse.php.domain.ExecutionFailedException;
 import me.galkin.eclipse.php.domain.PHPUnitCommand;
 import me.galkin.eclipse.php.domain.ProjectFinder;
 import me.galkin.eclipse.php.domain.ProjectNotFoundException;
@@ -61,10 +62,11 @@ public class Handler extends AbstractHandler {
 		return null;
 	}
 
-	private void runTests(PHPUnitCommand command, ResultView view,
-			ExecutionEvent event) {
+	private void runTests(PHPUnitCommand command, ResultView view, ExecutionEvent event) {
 		try {
 			view.notifyChange(new Runner().run(command));
+		} catch (ExecutionFailedException e) {
+			view.notifyFailure(e.getMessage());
 		} catch (Exception e) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 					"Information", e.getClass().toString() + ": "
@@ -76,7 +78,8 @@ public class Handler extends AbstractHandler {
 	private ResultView getResultView(ExecutionEvent event) {
 		try {
 			return (ResultView) HandlerUtil.getActiveWorkbenchWindow(event)
-					.getActivePage().showView(ResultView.ID, null, IWorkbenchPage.VIEW_VISIBLE);
+					.getActivePage().showView(ResultView.ID, null,
+							IWorkbenchPage.VIEW_VISIBLE);
 
 		} catch (PartInitException e) {
 			MessageDialog.openError(HandlerUtil.getActiveShell(event), "Error",
@@ -101,8 +104,8 @@ public class Handler extends AbstractHandler {
 					&& event.getApplicationContext() instanceof IEvaluationContext) {
 				IEvaluationContext ctx = (IEvaluationContext) event
 						.getApplicationContext();
-				
-				List defaultVariables = (List)ctx.getDefaultVariable();
+
+				List defaultVariables = (List) ctx.getDefaultVariable();
 				elem = defaultVariables.get(0);
 			}
 

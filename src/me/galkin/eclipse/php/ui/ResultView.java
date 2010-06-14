@@ -1,8 +1,5 @@
 package me.galkin.eclipse.php.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.galkin.eclipse.php.domain.IResultsComposite;
 import me.galkin.eclipse.php.utils.ResultSelector;
 
@@ -34,8 +31,12 @@ public class ResultView extends ViewPart {
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+				if (event.getSelection().isEmpty()) {
+					description.setText("");
+					return;
+				}
 				
+				IStructuredSelection selection = (IStructuredSelection)event.getSelection();			
 				String descr = ((IResultsComposite)selection.getFirstElement()).getDescription();
 				
 				description.setText(null == descr ? "" : descr);
@@ -44,7 +45,13 @@ public class ResultView extends ViewPart {
 	}
 
 	public void setFocus() {}
-
+	
+	public void notifyFailure(String failure) {
+		provider.clear();
+		viewer.refresh();
+		description.setText(failure);
+	}
+	
 	public void notifyChange(IResultsComposite suites) {
 		provider.clear();
 		
