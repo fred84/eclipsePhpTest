@@ -6,13 +6,13 @@ public class ResultSelector {
 
 	static public IResultsComposite firstFailed(IResultsComposite composite) {
 		if (!composite.isFailed()) {
-			return composite;
+			return null;
 		}
 
 		for (IResultsComposite child : composite.getFailedChildren()) {
 			return firstFailed(child);
 		}
 		
-		return composite;
-	}	
+		return null;
+	}
 }

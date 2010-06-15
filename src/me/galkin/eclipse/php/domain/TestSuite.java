@@ -1,11 +1,11 @@
 package me.galkin.eclipse.php.domain;
 
-class TestSuite extends ResultComposite {
+public class TestSuite extends ResultComposite {
 
 	private String name;
 	private String path;
 	
-	TestSuite(String name, String path) {
+	public TestSuite(String name, String path) {
 		this.name = name;
 		this.path = path;
 	}
@@ -14,7 +14,7 @@ class TestSuite extends ResultComposite {
 		this.name = name;
 	}
 
-	void add(TestCase testCase) {
+	public void add(TestCase testCase) {
 		testCase.setParent(this);
 		children.add(testCase);
 	}

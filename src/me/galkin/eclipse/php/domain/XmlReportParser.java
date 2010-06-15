@@ -79,20 +79,28 @@ class XmlReportParser implements IReportParser {
        	);
 	}
 
-	private TestCase createTestCase(Node node) throws NumberFormatException,
-			DOMException, ResultsNotFoundException {
-		if (node.hasChildNodes()) {
-			return new FailedTestCase(node.getAttributes().getNamedItem("name")
-					.getNodeValue(), Integer.parseInt(node.getAttributes()
-					.getNamedItem("line").getNodeValue()), getFailureText(node));
+	private TestCase createTestCase(Node node) throws NumberFormatException, DOMException {
+		String failure = getFailureText(node);
+		
+		if (null != failure) {
+			return new FailedTestCase(
+				node.getAttributes().getNamedItem("name").getNodeValue(), 
+				Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue()), 
+				failure
+			);
 		} else {
-			return new TestCase(node.getAttributes().getNamedItem("name")
-					.getNodeValue(), Integer.parseInt(node.getAttributes()
-					.getNamedItem("line").getNodeValue()));
+			return new TestCase(
+				node.getAttributes().getNamedItem("name").getNodeValue(), 
+				Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue())
+			);
 		}
 	}
 
-	private String getFailureText(Node node) throws ResultsNotFoundException {
+	private String getFailureText(Node node) {
+		if (!node.hasChildNodes()) {
+			return null;
+		}
+		
 		NodeList nodes = node.getChildNodes();
 
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -100,7 +108,7 @@ class XmlReportParser implements IReportParser {
 				return nodes.item(i).getTextContent();
 			}
 		}
-
-		throw new ResultsNotFoundException("failure node not found");
+		
+		return null;
 	}
 }

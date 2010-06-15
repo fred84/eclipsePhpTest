@@ -1,8 +1,8 @@
 package me.galkin.eclipse.php.domain;
 
-class TestSuites extends ResultComposite {
+public class TestSuites extends ResultComposite {
 
-	void add(TestSuite suite) {
+	public void add(TestSuite suite) {
 		suite.setParent(this);
 		children.add(suite);
 	}

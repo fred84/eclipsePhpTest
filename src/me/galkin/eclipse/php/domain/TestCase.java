@@ -5,13 +5,13 @@ import java.util.List;
 
 import me.galkin.eclipse.php.utils.Images;
 
-class TestCase implements IResultsComposite {
+public class TestCase implements IResultsComposite {
 
 	protected String name;
 	protected int line;
 	protected IResultsComposite parent;
 	
-	TestCase(String name, int line) {
+	public TestCase(String name, int line) {
 		this.name = name;
 		this.line = line;
 	}
@@ -73,8 +73,15 @@ class TestCase implements IResultsComposite {
 		this.parent = parent;
 	}
 
-	@Override
 	public List<IResultsComposite> getFailedChildren() {
 		return new ArrayList<IResultsComposite>();
+	}
+
+	public int getFailedResultsCount() {
+		return 0;
+	}
+
+	public int getResultsCount() {
+		return 1;
 	}
 }

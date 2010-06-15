@@ -2,11 +2,11 @@ package me.galkin.eclipse.php.domain;
 
 import me.galkin.eclipse.php.utils.Images;
 
-class FailedTestCase extends TestCase {
+public class FailedTestCase extends TestCase {
 
 	private String description;
 	
-	FailedTestCase(String name, int line, String descr) {
+	public FailedTestCase(String name, int line, String descr) {
 		super(name, line);
 		description = descr;
 	}
@@ -41,5 +41,9 @@ class FailedTestCase extends TestCase {
 	@Override
 	public String getDescription() {
 		return description;
+	}
+	
+	public int getFailedResultsCount() {
+		return 1;
 	}
 }

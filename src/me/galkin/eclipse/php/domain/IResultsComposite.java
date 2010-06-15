@@ -19,4 +19,8 @@ public interface IResultsComposite {
 	public String getDescription();
 	
 	public List<IResultsComposite> getFailedChildren();
+	
+	public int getResultsCount();
+	
+	public int getFailedResultsCount();
 }

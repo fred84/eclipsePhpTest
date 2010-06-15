@@ -36,22 +36,34 @@ abstract class ResultComposite implements IResultsComposite {
 		return false;
 	}
 	
-	@Override
+	public int getFailedResultsCount() {
+		int result = 0;	
+		for (IResultsComposite child : getFailedChildren()) {
+			result += child.getResultsCount();
+		}
+		return result;
+	}
+
+	public int getResultsCount() {
+		int result = 0;	
+		for (IResultsComposite child : children) {
+			result += child.getResultsCount();
+		}
+		return result;
+	}
+
 	public String getImageName() {
 		return isFailed() ? Images.IMAGE_FAIL : Images.IMAGE_PASS;
 	}
-	
-	@Override
+
 	public boolean hasChildren() {
 		return children.size() > 0;
 	}
-	
-	@Override
+
 	public IResultsComposite getParent() {
 		return parent;
 	}
-	
-	@Override
+
 	public String getDescription() {
 		return null;
 	}

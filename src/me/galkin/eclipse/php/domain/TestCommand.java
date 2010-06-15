@@ -43,6 +43,10 @@ public abstract class TestCommand {
 		try {
 			String bootstrapStr = project.getProject().getPersistentProperty(new QualifiedName("BOOTSTRAP", "BOOTSTRAP"));
 			
+			if (null == bootstrapStr) {
+				return null;
+			}
+			
 			IPath bootstrap = new Path(bootstrapStr);
 			
 			if (bootstrap.isEmpty()) {

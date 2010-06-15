@@ -86,4 +86,22 @@ public class TestSuiteTest {
 
 		assertEquals(expected, suite.getFailedChildren());
 	}
+	
+	@Test
+	public void getTestsCount() {
+		TestSuite suite = new TestSuite("name", "path");
+		suite.add(failed);
+		suite.add(passed);
+		
+		assertEquals(2, suite.getResultsCount());
+	}
+	
+	@Test
+	public void getFailedTestsCount() {
+		TestSuite suite = new TestSuite("name", "path");
+		suite.add(failed);
+		suite.add(passed);
+		
+		assertEquals(1, suite.getFailedResultsCount());
+	}
 }
