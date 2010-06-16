@@ -16,7 +16,7 @@ public class ResultSelectorTest {
 		TestSuites suites = new TestSuites();
 		suites.add(withPassedCases());
 		
-		assertNull(ResultSelector.firstFailed(suites));
+		assertEquals(suites, ResultSelector.firstFailed(suites));
 	}
 	
 	@Test
@@ -24,7 +24,7 @@ public class ResultSelectorTest {
 		TestSuites suites = new TestSuites();
 		suites.add(withFailedCases());
 		
-		assertEquals(null, ResultSelector.firstFailed(suites));
+		assertEquals(failed, ResultSelector.firstFailed(suites));
 	}
 	
 	TestSuite withPassedCases() {

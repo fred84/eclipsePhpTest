@@ -39,7 +39,7 @@ abstract class ResultComposite implements IResultsComposite {
 	public int getFailedResultsCount() {
 		int result = 0;	
 		for (IResultsComposite child : getFailedChildren()) {
-			result += child.getResultsCount();
+			result += child.getFailedResultsCount();
 		}
 		return result;
 	}

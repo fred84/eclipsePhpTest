@@ -48,6 +48,24 @@ public class TestSuitesTest {
 		assertFalse(suites.isFailed());
 	}
 	
+	@Test
+	public void getTestsCount() {
+		TestSuites suites = new TestSuites();
+		suites.add(withPassedCases());
+		suites.add(withFailedCases());
+		
+		assertEquals(3, suites.getResultsCount());
+	}
+	
+	@Test
+	public void getFailedTestsCount() {
+		TestSuites suites = new TestSuites();
+		suites.add(withPassedCases());
+		suites.add(withFailedCases());
+		
+		assertEquals(1, suites.getFailedResultsCount());
+	}
+	
 	TestSuite withPassedCases() {
 		TestSuite suite = new TestSuite("name", "path");
 		suite.add(passed);
@@ -57,6 +75,7 @@ public class TestSuitesTest {
 	TestSuite withFailedCases() {
 		TestSuite suite = new TestSuite("name", "path");
 		suite.add(failed);
+		suite.add(passed);
 		return suite;
 	}
 }
