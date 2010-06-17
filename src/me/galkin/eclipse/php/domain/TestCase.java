@@ -43,6 +43,10 @@ public class TestCase implements IResultsComposite {
 	public boolean isFailed() {
 		return false;
 	}
+	
+	public boolean isError() {
+		return false;
+	}
 
 	@Override
 	public String getImageName() {
@@ -76,11 +80,19 @@ public class TestCase implements IResultsComposite {
 	public List<IResultsComposite> getFailedChildren() {
 		return new ArrayList<IResultsComposite>();
 	}
+	
+	public List<IResultsComposite> getErrorChildren() {
+		return new ArrayList<IResultsComposite>();
+	}
 
 	public int getFailedResultsCount() {
 		return 0;
 	}
 
+	public int getErrorResultsCount() {
+		return 0;
+	}
+	
 	public int getResultsCount() {
 		return 1;
 	}

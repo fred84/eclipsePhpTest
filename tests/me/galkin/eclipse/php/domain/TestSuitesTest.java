@@ -18,6 +18,7 @@ public class TestSuitesTest {
 
 	TestCase failed = new FailedTestCase("failedTest", 1, "fail");
 	TestCase passed = new TestCase("passedTest", 2);
+	TestCase error = new ErrorTestCase("errorTest", 2, "error");
 	
 	@Test
 	public void getChildren() {
@@ -53,8 +54,9 @@ public class TestSuitesTest {
 		TestSuites suites = new TestSuites();
 		suites.add(withPassedCases());
 		suites.add(withFailedCases());
+		suites.add(withErrorCases());
 		
-		assertEquals(3, suites.getResultsCount());
+		assertEquals(4, suites.getResultsCount());
 	}
 	
 	@Test
@@ -62,8 +64,19 @@ public class TestSuitesTest {
 		TestSuites suites = new TestSuites();
 		suites.add(withPassedCases());
 		suites.add(withFailedCases());
+		suites.add(withErrorCases());
 		
-		assertEquals(1, suites.getFailedResultsCount());
+		assertEquals(2, suites.getFailedResultsCount());
+	}
+	
+	@Test
+	public void getErrorTestsCount() {
+		TestSuites suites = new TestSuites();
+		suites.add(withPassedCases());
+		suites.add(withFailedCases());
+		suites.add(withErrorCases());
+		
+		assertEquals(1, suites.getErrorResultsCount());
 	}
 	
 	TestSuite withPassedCases() {
@@ -72,10 +85,16 @@ public class TestSuitesTest {
 		return suite;
 	}
 	
+	TestSuite withErrorCases() {
+		TestSuite suite = new TestSuite("name", "path");
+		suite.add(error);
+		return suite;
+	}
+	
 	TestSuite withFailedCases() {
 		TestSuite suite = new TestSuite("name", "path");
 		suite.add(failed);
-		suite.add(passed);
+		suite.add(failed);
 		return suite;
 	}
 }

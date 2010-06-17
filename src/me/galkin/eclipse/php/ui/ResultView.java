@@ -3,10 +3,8 @@ package me.galkin.eclipse.php.ui;
 import me.galkin.eclipse.php.domain.IResultsComposite;
 import me.galkin.eclipse.php.utils.ResultSelector;
 
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.*;
@@ -16,8 +14,6 @@ import org.eclipse.swt.SWT;
 
 public class ResultView extends ViewPart {
 
-	private static final int LABEL_STYLE = SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY | SWT.SHADOW_ETCHED_IN;
-	
 	public static final String ID = "me.galkin.eclipse.php.ui.ResultView";
 
 	private TreeViewer viewer;
@@ -25,29 +21,35 @@ public class ResultView extends ViewPart {
 	private Label description;
 	private Label failedCount;
 	private Label totalCount;
+	private Label errorCount;
 	
 	private TreeContentProvider provider = new TreeContentProvider();
 	
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new FillLayout(SWT.VERTICAL));
-		
-		Composite statusPanel = getStatusPanel(parent);
-		Composite resultPanel = getResultPanel(parent);
-		
+		parent.setLayout(new GridLayout(7, false));
 
+		createLabel(parent, "Tests:");
+		totalCount = createLabel(parent, "0");
+		createLabel(parent, "Errors:");
+		errorCount = createLabel(parent, "0");
+		createLabel(parent, "Failed:");
+		failedCount = createLabel(parent, "0");
 		
-		viewer = new TreeViewer(resultPanel, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL | SWT.SHADOW_ETCHED_IN);
+		viewer = new TreeViewer(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER | SWT.SHADOW_ETCHED_IN);
 		viewer.setContentProvider(provider);
 		viewer.setLabelProvider(new ResultsLabelProvider());
 		viewer.setSorter(new ViewerSorter());
 		viewer.setInput(getViewSite());
 		
-		description = new Label(resultPanel, LABEL_STYLE);
+		GridData treeGrid = new GridData(GridData.FILL, GridData.FILL, true, true);
+		treeGrid.horizontalSpan = 6;
 		
-		totalCount = new Label(statusPanel, LABEL_STYLE);
-		failedCount = new Label(statusPanel, LABEL_STYLE);
-		totalCount.setText("Tests: 0");
-		failedCount.setText("Failed: 0");
+		viewer.getControl().setLayoutData(treeGrid);
+		
+		GridData descrGrid = new GridData(GridData.FILL, GridData.FILL, true, true);
+		
+		description = new Label(parent, SWT.SINGLE | SWT.BORDER | SWT.SHADOW_ETCHED_IN);
+		description.setLayoutData(descrGrid);
 		
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -68,8 +70,9 @@ public class ResultView extends ViewPart {
 	public void setFocus() {}
 	
 	public void notifyFailure(String failure) {
-		totalCount.setText("Tests: 0");
-		failedCount.setText("Failed: 0");
+		totalCount.setText("0");
+		failedCount.setText("0");
+		errorCount.setText("0");
 		
 		provider.clear();
 		viewer.refresh();
@@ -84,28 +87,22 @@ public class ResultView extends ViewPart {
 			provider.add(suite);
 		}
 		
-		totalCount.setText("Tests: " + String.valueOf(suites.getResultsCount()));
-		failedCount.setText("Failed: " + String.valueOf(suites.getFailedResultsCount()));
+		totalCount.setText(String.valueOf(suites.getResultsCount()));
+		failedCount.setText(String.valueOf(suites.getFailedResultsCount()));
+		errorCount.setText(String.valueOf(suites.getErrorResultsCount()));
 		
 		viewer.refresh();
 
-		if (suites.isFailed()) {
+		if (suites.isFailed() || suites.isError()) {
 			viewer.setExpandedElements(suites.getFailedChildren().toArray());
 			viewer.setSelection(new StructuredSelection(ResultSelector.firstFailed(suites)));
 		}
 	}
 	
-	private Composite getStatusPanel(Composite parent) {
-		Composite panel = new Composite(parent, SWT.BORDER);
-		panel.setLayout(new FillLayout(SWT.HORIZONTAL));
-	    panel.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING));
-	    return panel; 
-	}
-	
-	private Composite getResultPanel(Composite parent) {
-		Composite panel = new Composite(parent, SWT.BORDER);
-		panel.setLayout(new FillLayout(SWT.HORIZONTAL));
-		panel.setLayoutData(new GridData(GridData.GRAB_VERTICAL | GridData.FILL_BOTH));
-		return panel; 	
+	private Label createLabel(Composite parent, String text) {
+		Label lbl = new Label(parent, SWT.NONE);
+		lbl.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false));
+		lbl.setText(text);
+		return lbl;
 	}
 }

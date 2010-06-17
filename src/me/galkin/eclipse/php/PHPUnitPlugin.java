@@ -33,13 +33,15 @@ public class PHPUnitPlugin extends AbstractUIPlugin {
 	}
 	
 	protected void initializeImageRegistry(ImageRegistry registry) {
+		registerImage(registry, Images.IMAGE_PASS);
+		registerImage(registry, Images.IMAGE_FAIL);
+		registerImage(registry, Images.IMAGE_ERROR);
+	}
+	
+	private void registerImage(ImageRegistry registry, String imageName) {
 		registry.put(
-				Images.IMAGE_PASS, 
-				ImageDescriptor.createFromURL(bundle.getEntry(Images.getImagePath(Images.IMAGE_PASS)))
-		);
-		registry.put(
-				Images.IMAGE_FAIL, 
-				ImageDescriptor.createFromURL(bundle.getEntry(Images.getImagePath(Images.IMAGE_FAIL)))
+				imageName, 
+				ImageDescriptor.createFromURL(bundle.getEntry(Images.getImagePath(imageName)))
 		);
 	}
 }

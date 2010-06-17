@@ -25,10 +25,31 @@ abstract class ResultComposite implements IResultsComposite {
 		
 		return result;
 	}
+	
+	public List<IResultsComposite> getErrorChildren() {
+		List<IResultsComposite> result = new ArrayList<IResultsComposite>();
+		for (IResultsComposite child : children) {
+			if (child.isError()) {
+				result.add(child);
+			}
+		}
+		
+		return result;
+	}
 
 	public boolean isFailed() {
 		for(IResultsComposite child: children) {
 			if (child.isFailed()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean isError() {
+		for(IResultsComposite child: children) {
+			if (child.isError()) {
 				return true;
 			}
 		}
@@ -43,6 +64,14 @@ abstract class ResultComposite implements IResultsComposite {
 		}
 		return result;
 	}
+	
+	public int getErrorResultsCount() {
+		int result = 0;	
+		for (IResultsComposite child : getErrorChildren()) {
+			result += child.getErrorResultsCount();
+		}
+		return result;
+	}
 
 	public int getResultsCount() {
 		int result = 0;	
@@ -53,7 +82,11 @@ abstract class ResultComposite implements IResultsComposite {
 	}
 
 	public String getImageName() {
-		return isFailed() ? Images.IMAGE_FAIL : Images.IMAGE_PASS;
+		if (isFailed()) {
+			return Images.IMAGE_FAIL;
+		}
+		
+		return isError() ? Images.IMAGE_ERROR : Images.IMAGE_PASS;
 	}
 
 	public boolean hasChildren() {

@@ -88,12 +88,23 @@ class XmlReportParser implements IReportParser {
 				Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue()), 
 				failure
 			);
-		} else {
-			return new TestCase(
-				node.getAttributes().getNamedItem("name").getNodeValue(), 
-				Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue())
-			);
 		}
+		
+		String error = getErrorText(node);
+		
+		if (null != error) {
+			return new ErrorTestCase(
+					node.getAttributes().getNamedItem("name").getNodeValue(), 
+					Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue()), 
+					error
+				);
+		}
+		
+		return new TestCase(
+			node.getAttributes().getNamedItem("name").getNodeValue(), 
+			Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue())
+		);
+		
 	}
 
 	private String getFailureText(Node node) {
@@ -105,6 +116,22 @@ class XmlReportParser implements IReportParser {
 
 		for (int i = 0; i < nodes.getLength(); i++) {
 			if (nodes.item(i).getNodeName().equals("failure")) {
+				return nodes.item(i).getTextContent();
+			}
+		}
+		
+		return null;
+	}
+	
+	private String getErrorText(Node node) {
+		if (!node.hasChildNodes()) {
+			return null;
+		}
+		
+		NodeList nodes = node.getChildNodes();
+
+		for (int i = 0; i < nodes.getLength(); i++) {
+			if (nodes.item(i).getNodeName().equals("error")) {
 				return nodes.item(i).getTextContent();
 			}
 		}

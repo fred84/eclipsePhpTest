@@ -19,6 +19,7 @@ public class TestSuiteTest {
 
 	TestCase failed = new FailedTestCase("failedTest", 1, "fail");
 	TestCase passed = new TestCase("passedTest", 2);
+	TestCase error = new ErrorTestCase("errorTest", 2, "error");
 	
 	@Test
 	public void getChildren() {
@@ -63,10 +64,19 @@ public class TestSuiteTest {
 	public void getImageName_failed() {
 		TestSuite suite = new TestSuite("name", "path");
 		suite.add(failed);
+		suite.add(error);
 		
 		assertEquals(Images.IMAGE_FAIL, suite.getImageName());
 	}
 
+	@Test
+	public void getImageName_Error() {
+		TestSuite suite = new TestSuite("name", "path");
+		suite.add(error);
+		
+		assertEquals(Images.IMAGE_ERROR, suite.getImageName());
+	}
+	
 	@Test
 	public void getImageName_passed() {
 		TestSuite suite = new TestSuite("name", "path");

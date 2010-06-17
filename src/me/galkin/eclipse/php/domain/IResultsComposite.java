@@ -6,6 +6,8 @@ public interface IResultsComposite {
 
 	public boolean isFailed();
 	
+	public boolean isError();
+	
 	public List<IResultsComposite> getChilden();
 	
 	public boolean hasChildren();
@@ -20,7 +22,11 @@ public interface IResultsComposite {
 	
 	public List<IResultsComposite> getFailedChildren();
 	
+	public List<IResultsComposite> getErrorChildren();
+	
 	public int getResultsCount();
 	
 	public int getFailedResultsCount();
+	
+	public int getErrorResultsCount();
 }

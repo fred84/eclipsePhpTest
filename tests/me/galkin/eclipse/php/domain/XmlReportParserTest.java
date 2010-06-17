@@ -25,6 +25,7 @@ public class XmlReportParserTest {
 		TestSuite suite = new TestSuite("MyTestCase", "/test3/test/MyTestCase.php");
 		suite.add(new TestCase("testWillPass", 4));
 		suite.add(new FailedTestCase("testWillFail", 8, "MyTestCase::testWillFail"));	
+		suite.add(new ErrorTestCase("testWithError", 11, "MyTestCase::testWithError"));
 		TestSuites expected = new TestSuites();
 		expected.add(suite);
 		// verify
@@ -65,6 +66,9 @@ public class XmlReportParserTest {
 		+ "\n <testcase name=\"testWillFail\" class=\"MyTestCase\" file=\"/test3/test/MyTestCase.php\" line=\"8\" assertions=\"1\" time=\"0.000821\">"
 		+ "\n <failure type=\"PHPUnit_Framework_ExpectationFailedException\">MyTestCase::testWillFail</failure>"
 		+ "\n </testcase>"
+		+ "\n <testcase name=\"testWithError\" class=\"MyTestCase\" file=\"/test3/test/MyTestCase.php\" line=\"11\" assertions=\"0\" time=\"0.000322\">"
+	    + "\n <error type=\"PHPUnit_Framework_Error_Notice\">MyTestCase::testWithError</error>"
+	    + "\n </testcase>"
 		+ "\n </testsuite>"
 		+ "\n </testsuites>";
 	}
