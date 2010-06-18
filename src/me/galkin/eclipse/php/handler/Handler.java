@@ -2,11 +2,9 @@ package me.galkin.eclipse.php.handler;
 
 import java.util.List;
 
-import me.galkin.eclipse.php.domain.ExecutionFailedException;
 import me.galkin.eclipse.php.domain.PHPUnitCommand;
 import me.galkin.eclipse.php.domain.ProjectFinder;
 import me.galkin.eclipse.php.domain.ProjectNotFoundException;
-import me.galkin.eclipse.php.domain.Runner;
 import me.galkin.eclipse.php.ui.ResultView;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -14,6 +12,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -23,7 +22,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class Handler extends AbstractHandler {
-
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ResultView view = getResultView(event);
@@ -51,8 +50,8 @@ public class Handler extends AbstractHandler {
 		}
 
 		try {
-			runTests(new PHPUnitCommand(unit, ProjectFinder.getProject(unit),
-					phpunit), view, event);
+			Job testJob = new PHPTestJob(view, new PHPUnitCommand(unit, ProjectFinder.getProject(unit),phpunit));
+			testJob.schedule();
 		} catch (ProjectNotFoundException e) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 					"Information", e.getMessage());
@@ -60,19 +59,6 @@ public class Handler extends AbstractHandler {
 		}
 
 		return null;
-	}
-
-	private void runTests(PHPUnitCommand command, ResultView view, ExecutionEvent event) {
-		try {
-			view.notifyChange(new Runner().run(command));
-		} catch (ExecutionFailedException e) {
-			view.notifyFailure(e.getMessage());
-		} catch (Exception e) {
-			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
-					"Information", e.getClass().toString() + ": "
-							+ e.getMessage() + "; "
-							+ e.getStackTrace().toString());
-		}
 	}
 
 	private ResultView getResultView(ExecutionEvent event) {
@@ -109,7 +95,7 @@ public class Handler extends AbstractHandler {
 				elem = defaultVariables.get(0);
 			}
 
-			// dependency on internal pdt class
+			// dependency on internal PDT class
 			if (elem instanceof IImplForPhp) {
 				return ((IImplForPhp) elem).getModelElement();
 			}
