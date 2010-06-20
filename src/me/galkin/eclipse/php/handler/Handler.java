@@ -23,8 +23,18 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class Handler extends AbstractHandler {
 	
+	
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		Job[] jobs = Job.getJobManager().find(PHPTestJob.FAMILY);
+		
+		if (jobs.length > 0) {
+			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
+					"Information", "Another test already running");
+			return null;
+		}
+		
 		ResultView view = getResultView(event);
 
 		if (null == view) {
@@ -50,7 +60,11 @@ public class Handler extends AbstractHandler {
 		}
 
 		try {
+			
+			
 			Job testJob = new PHPTestJob(view, new PHPUnitCommand(unit, ProjectFinder.getProject(unit),phpunit));
+		
+			
 			testJob.schedule();
 		} catch (ProjectNotFoundException e) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),

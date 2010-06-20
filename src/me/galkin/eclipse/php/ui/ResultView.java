@@ -48,7 +48,7 @@ public class ResultView extends ViewPart {
 		
 		GridData descrGrid = new GridData(GridData.FILL, GridData.FILL, true, true);
 		
-		description = new Label(parent, SWT.SINGLE | SWT.BORDER | SWT.SHADOW_ETCHED_IN);
+		description = new Label(parent, SWT.SINGLE | SWT.BORDER | SWT.SHADOW_ETCHED_IN | SWT.WRAP);
 		description.setLayoutData(descrGrid);
 		
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
