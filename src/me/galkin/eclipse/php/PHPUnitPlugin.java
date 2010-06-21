@@ -36,6 +36,8 @@ public class PHPUnitPlugin extends AbstractUIPlugin {
 		registerImage(registry, Images.IMAGE_PASS);
 		registerImage(registry, Images.IMAGE_FAIL);
 		registerImage(registry, Images.IMAGE_ERROR);
+		registerImage(registry, Images.IMAGE_ERRORS);
+		registerImage(registry, Images.IMAGE_FAILURES);
 	}
 	
 	private void registerImage(ImageRegistry registry, String imageName) {

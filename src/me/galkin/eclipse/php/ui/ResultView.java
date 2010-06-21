@@ -1,8 +1,11 @@
 package me.galkin.eclipse.php.ui;
 
+import me.galkin.eclipse.php.PHPUnitPlugin;
 import me.galkin.eclipse.php.domain.IResultsComposite;
+import me.galkin.eclipse.php.utils.Images;
 import me.galkin.eclipse.php.utils.ResultSelector;
 
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,12 +31,12 @@ public class ResultView extends ViewPart {
 	
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new GridLayout(7, false));
-
-		createLabel(parent, "Tests:");
+		
+		createLabel(parent, "Runs:");
 		totalCount = createLabel(parent, "0");
-		createLabel(parent, "Errors:");
+		createLabel(parent, "Errors:", PHPUnitPlugin.getDefault().getImageRegistry().get(Images.IMAGE_ERRORS));
 		errorCount = createLabel(parent, "0");
-		createLabel(parent, "Failed:");
+		createLabel(parent, "Failures:", PHPUnitPlugin.getDefault().getImageRegistry().get(Images.IMAGE_FAILURES));
 		failedCount = createLabel(parent, "0");
 		status = createLabel(parent, "");
 		
@@ -109,6 +112,16 @@ public class ResultView extends ViewPart {
 	
 	private Label createLabel(Composite parent, String text) {
 		Label lbl = new Label(parent, SWT.NONE);
+		lbl.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false));
+		lbl.setText(text);
+
+		return lbl;
+	}
+	
+	private Label createLabel(Composite parent, String text, Image image) {
+		Label lbl = createLabel(parent, text);
+		image.setBackground(lbl.getBackground());
+		lbl.setImage(image);
 		lbl.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false));
 		lbl.setText(text);
 		return lbl;
