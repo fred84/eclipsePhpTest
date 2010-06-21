@@ -32,21 +32,13 @@ public class PHPTestJob extends Job {
 
 	protected IStatus run(IProgressMonitor monitor) {
 		try {
+			notifyRunning();
+			
 			final IResultsComposite result = new Runner().run(command); 
 				
-			Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						view.notifyChange(result);
-					}
-			});
+			notifyCompleted(result);
 		} catch (final ExecutionFailedException e) {
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-					view.notifyFailure(e.getMessage());
-				}
-			});
-		
-		
+			notifyFailure(e);
 		} catch (Exception e) {
 			return new Status(IStatus.ERROR, PHPUnitPlugin.PLUGIN_ID, IStatus.ERROR, "error", e);
 		}
@@ -54,4 +46,27 @@ public class PHPTestJob extends Job {
 		return Status.OK_STATUS;
 	}
 
+	private void notifyFailure(final ExecutionFailedException e) {
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				view.notifyFailure(e.getMessage());
+			}
+		});
+	}
+
+	private void notifyCompleted(final IResultsComposite result) {
+		Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					view.notifyChange(result);
+				}
+		});
+	}
+	
+	private void notifyRunning() {
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				view.notifyRunning();
+			}
+		});	
+	}
 }

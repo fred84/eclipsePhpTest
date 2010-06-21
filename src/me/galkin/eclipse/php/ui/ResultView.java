@@ -22,6 +22,7 @@ public class ResultView extends ViewPart {
 	private Label failedCount;
 	private Label totalCount;
 	private Label errorCount;
+	private Label status;
 	
 	private TreeContentProvider provider = new TreeContentProvider();
 	
@@ -34,6 +35,7 @@ public class ResultView extends ViewPart {
 		errorCount = createLabel(parent, "0");
 		createLabel(parent, "Failed:");
 		failedCount = createLabel(parent, "0");
+		status = createLabel(parent, "");
 		
 		viewer = new TreeViewer(parent, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER | SWT.SHADOW_ETCHED_IN);
 		viewer.setContentProvider(provider);
@@ -69,10 +71,15 @@ public class ResultView extends ViewPart {
 
 	public void setFocus() {}
 	
+	public void notifyRunning() {
+		status.setText("running");
+	}
+	
 	public void notifyFailure(String failure) {
 		totalCount.setText("0");
 		failedCount.setText("0");
 		errorCount.setText("0");
+		status.setText("");
 		
 		provider.clear();
 		viewer.refresh();
@@ -82,6 +89,7 @@ public class ResultView extends ViewPart {
 	public void notifyChange(IResultsComposite suites) {
 		provider.clear();
 		description.setText("");
+		status.setText("");
 		
 		for(IResultsComposite suite: suites.getChilden()) {
 			provider.add(suite);
