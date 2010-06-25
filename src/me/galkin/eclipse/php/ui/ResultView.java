@@ -5,6 +5,7 @@ import me.galkin.eclipse.php.domain.IResultsComposite;
 import me.galkin.eclipse.php.utils.Images;
 import me.galkin.eclipse.php.utils.ResultSelector;
 
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -112,17 +113,16 @@ public class ResultView extends ViewPart {
 	
 	private Label createLabel(Composite parent, String text) {
 		Label lbl = new Label(parent, SWT.NONE);
-		lbl.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false));
+		lbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		lbl.setText(text);
 
 		return lbl;
 	}
 	
-	private Label createLabel(Composite parent, String text, Image image) {
-		Label lbl = createLabel(parent, text);
-		image.setBackground(lbl.getBackground());
+	private CLabel createLabel(Composite parent, String text, Image image) {
+		CLabel lbl = new CLabel(parent, SWT.NONE);
+		lbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		lbl.setImage(image);
-		lbl.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false));
 		lbl.setText(text);
 		return lbl;
 	}
