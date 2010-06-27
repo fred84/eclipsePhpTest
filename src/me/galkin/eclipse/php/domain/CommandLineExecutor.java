@@ -6,8 +6,28 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-class CommandLineExecutor {
+public class CommandLineExecutor {
 
+	public static class Buffers {
+		
+		private String out;
+		private String err;
+		
+		Buffers(String out, String err) {
+			this.out = out;
+			this.err = err;
+		}
+		
+		public String getOut() {
+			return out;
+		}
+		
+		public String getErr() {
+			return err;
+		}
+		
+	}
+	
 	private static class OutputBuffer extends Thread {
 		private InputStream stream;
 		private StringBuffer result = new StringBuffer();
@@ -34,11 +54,11 @@ class CommandLineExecutor {
 		}
 	}
 	
-	IExecAnalyzer customCommand(String[] command, File dir) throws IOException, InterruptedException {
+	public Buffers customCommand(String[] command, File dir) throws IOException, InterruptedException {
 		return run(command, dir);
 	}
 	
-	private IExecAnalyzer run(Process process) throws IOException, InterruptedException {
+	private Buffers run(Process process) throws IOException, InterruptedException {
 		OutputBuffer stderr = new OutputBuffer(process.getErrorStream());         
 		OutputBuffer stdout = new OutputBuffer(process.getInputStream());       
 
@@ -47,10 +67,10 @@ class CommandLineExecutor {
 		
 		process.waitFor();
 
-		return new PHPUnitExecAnalyzer(stdout.getOutput(), stderr.getOutput());
+		return new Buffers(stdout.getOutput(), stderr.getOutput());
 	}
 	
-	private IExecAnalyzer run(String[] command, File dir) throws IOException, InterruptedException {
+	private Buffers run(String[] command, File dir) throws IOException, InterruptedException {
 		return run(Runtime.getRuntime().exec(command, new String[0], dir));
 	}
 }

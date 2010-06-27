@@ -7,7 +7,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.DOMException;
@@ -20,30 +19,33 @@ import org.xml.sax.SAXException;
 class XmlReportParser implements IReportParser {
 
 	@Override
-	public TestSuites parse(String xml) throws SAXException, IOException, ParserConfigurationException, ResultsNotFoundException, XPathExpressionException {
-	    XPathExpression expr = XPathFactory
-	    	.newInstance()
-	    	.newXPath()
-	    	.compile("//testsuite[@file]");
-	    
-	    NodeList suitesNodes = (NodeList)expr.evaluate(getDocument(xml), XPathConstants.NODESET);
-		
-	    TestSuites suites = new TestSuites();
-		
-		for (int i = 0; i < suitesNodes.getLength(); i++) {
-			TestSuite suite = createTestSuite(suitesNodes.item(i));
-			suites.add(suite);
+	public IResultsComposite parse(String xml) throws ResultsNotFoundException {
+		try {
+			XPathExpression expr = XPathFactory.newInstance().newXPath()
+					.compile("//testsuite[@file]");
 
-			NodeList cases = suitesNodes.item(i).getChildNodes();
+			NodeList suitesNodes = (NodeList) expr.evaluate(getDocument(xml),
+					XPathConstants.NODESET);
 
-			for (int j = 0; j < cases.getLength(); j++) {
-				if (cases.item(j).getNodeName().equals("testcase")) {
-					suite.add(createTestCase(cases.item(j)));
+			TestSuites suites = new TestSuites();
+
+			for (int i = 0; i < suitesNodes.getLength(); i++) {
+				TestSuite suite = createTestSuite(suitesNodes.item(i));
+				suites.add(suite);
+
+				NodeList cases = suitesNodes.item(i).getChildNodes();
+
+				for (int j = 0; j < cases.getLength(); j++) {
+					if (cases.item(j).getNodeName().equals("testcase")) {
+						suite.add(createTestCase(cases.item(j)));
+					}
 				}
 			}
-		}
 
-		return suites;
+			return suites;
+		} catch (Exception e) {
+			throw new ResultsNotFoundException(e);
+		}
 	}
 
 	private Document getDocument(String xml) throws SAXException, IOException,
@@ -68,50 +70,44 @@ class XmlReportParser implements IReportParser {
 
 	private TestSuite createTestSuite(Node node) {
 		if (null == node.getAttributes().getNamedItem("file")) {
-			return new TestSuite(
-				node.getAttributes().getNamedItem("name").getNodeValue()
-			);
+			return new TestSuite(node.getAttributes().getNamedItem("name")
+					.getNodeValue());
 		}
-		
-		return new TestSuite(
-        	node.getAttributes().getNamedItem("name").getNodeValue(),
-        	node.getAttributes().getNamedItem("file").getNodeValue()
-       	);
+
+		return new TestSuite(node.getAttributes().getNamedItem("name")
+				.getNodeValue(), node.getAttributes().getNamedItem("file")
+				.getNodeValue());
 	}
 
-	private TestCase createTestCase(Node node) throws NumberFormatException, DOMException {
+	private TestCase createTestCase(Node node) throws NumberFormatException,
+			DOMException {
 		String failure = getFailureText(node);
-		
+
 		if (null != failure) {
-			return new FailedTestCase(
-				node.getAttributes().getNamedItem("name").getNodeValue(), 
-				Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue()), 
-				failure
-			);
+			return new FailedTestCase(node.getAttributes().getNamedItem("name")
+					.getNodeValue(), Integer.parseInt(node.getAttributes()
+					.getNamedItem("line").getNodeValue()), failure);
 		}
-		
+
 		String error = getErrorText(node);
-		
+
 		if (null != error) {
-			return new ErrorTestCase(
-					node.getAttributes().getNamedItem("name").getNodeValue(), 
-					Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue()), 
-					error
-				);
+			return new ErrorTestCase(node.getAttributes().getNamedItem("name")
+					.getNodeValue(), Integer.parseInt(node.getAttributes()
+					.getNamedItem("line").getNodeValue()), error);
 		}
-		
-		return new TestCase(
-			node.getAttributes().getNamedItem("name").getNodeValue(), 
-			Integer.parseInt(node.getAttributes().getNamedItem("line").getNodeValue())
-		);
-		
+
+		return new TestCase(node.getAttributes().getNamedItem("name")
+				.getNodeValue(), Integer.parseInt(node.getAttributes()
+				.getNamedItem("line").getNodeValue()));
+
 	}
 
 	private String getFailureText(Node node) {
 		if (!node.hasChildNodes()) {
 			return null;
 		}
-		
+
 		NodeList nodes = node.getChildNodes();
 
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -119,15 +115,15 @@ class XmlReportParser implements IReportParser {
 				return nodes.item(i).getTextContent();
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	private String getErrorText(Node node) {
 		if (!node.hasChildNodes()) {
 			return null;
 		}
-		
+
 		NodeList nodes = node.getChildNodes();
 
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -135,7 +131,7 @@ class XmlReportParser implements IReportParser {
 				return nodes.item(i).getTextContent();
 			}
 		}
-		
+
 		return null;
 	}
 }

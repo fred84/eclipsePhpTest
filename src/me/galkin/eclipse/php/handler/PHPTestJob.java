@@ -1,10 +1,12 @@
 package me.galkin.eclipse.php.handler;
 
 import me.galkin.eclipse.php.PHPUnitPlugin;
+import me.galkin.eclipse.php.domain.CommandLineExecutor;
 import me.galkin.eclipse.php.domain.ExecutionFailedException;
+import me.galkin.eclipse.php.domain.IExecAnalyzer;
 import me.galkin.eclipse.php.domain.IResultsComposite;
-import me.galkin.eclipse.php.domain.PHPUnitCommand;
-import me.galkin.eclipse.php.domain.Runner;
+import me.galkin.eclipse.php.domain.TestCommand;
+import me.galkin.eclipse.php.domain.CommandLineExecutor.Buffers;
 import me.galkin.eclipse.php.ui.ResultView;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -18,12 +20,16 @@ public class PHPTestJob extends Job {
 	public static final String FAMILY = "PHP.Test.Job";
 	
 	private ResultView view;
-	private PHPUnitCommand command;
+	private TestCommand command;
+	private IExecAnalyzer analyzer;
 	
-	public PHPTestJob(ResultView view, PHPUnitCommand command) {
+	private CommandLineExecutor exec = new CommandLineExecutor();
+	
+	public PHPTestJob(ResultView view, TestCommand command, IExecAnalyzer analyzer) {
 		super(FAMILY);
 		this.view = view;
 		this.command = command;
+		this.analyzer = analyzer;
 	}
 	
 	public boolean belongsTo(Object family) {
@@ -34,7 +40,9 @@ public class PHPTestJob extends Job {
 		try {
 			notifyRunning();
 			
-			final IResultsComposite result = new Runner().run(command); 
+			Buffers buff = exec.customCommand(command.toCommand(), command.getWorkingDirectory());			
+
+			final IResultsComposite result = analyzer.getResults(command, buff.getOut(), buff.getErr()); 
 				
 			notifyCompleted(result);
 		} catch (final ExecutionFailedException e) {

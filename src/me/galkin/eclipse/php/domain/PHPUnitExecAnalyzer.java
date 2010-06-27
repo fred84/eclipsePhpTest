@@ -1,33 +1,44 @@
 package me.galkin.eclipse.php.domain;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 
-	private String out;
-	private String err;
+	private Pattern regex = Pattern.compile(".*1\\.\\.\\d+$", Pattern.MULTILINE | Pattern.DOTALL);
 	
-	public PHPUnitExecAnalyzer(String stdout, String stderr) {
-		out = stdout;
-		err = stderr;
+	public IResultsComposite getResults(TestCommand command, String out, String err) throws ResultsNotFoundException, ExecutionFailedException {
+		if (!isSuccessful(err, out)) {
+			throw new ExecutionFailedException(getError(err, out));
+		}
+		
+		String xml;
+		try {
+			xml = readFileAsString(new File(((PHPUnitCommand)command).getReport().getAbsolutePath()));
+		} catch (IOException e) {
+			throw new ExecutionFailedException("Error reading results file");
+		}
+		
+		return new XmlReportParser().parse(xml);
 	}
 	
-	public boolean isSuccessful() {
+	private boolean isSuccessful(String err, String out) {
 		if (!err.equals("")) {
 			return false;
 		}
-		
-		Pattern regex = Pattern.compile(".*1\\.\\.\\d+$", Pattern.MULTILINE | Pattern.DOTALL);
-		
+
 		return regex.matcher(out).matches();
 	}
 	
-	public String getError() {
+	private String getError(String err, String out) {
 		if (!err.equals("")) {
 			return err;
 		}
 		
-		if (isSuccessful()) {
+		if (isSuccessful(err, out)) {
 			return "";
 		}
 	
@@ -38,5 +49,13 @@ public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 		}
 		
 		return out.substring(index + 1).replace("TAP version 13", "");
-	} 
+	}
+	
+	private static String readFileAsString(File file) throws java.io.IOException{
+	    byte[] buffer = new byte[(int)file.length()];
+	    BufferedInputStream f = new BufferedInputStream(new FileInputStream(file));
+	    f.read(buffer);
+	    return new String(buffer);
+	}
+
 }

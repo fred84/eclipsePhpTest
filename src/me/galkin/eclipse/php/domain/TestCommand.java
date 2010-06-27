@@ -1,6 +1,7 @@
 package me.galkin.eclipse.php.domain;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -30,6 +31,8 @@ public abstract class TestCommand {
 	public File getWorkingDirectory() {
 		return getWorkingPath().toFile();
 	}
+	
+	abstract public String[] toCommand() throws IOException;
 	
 	protected IPath getWorkingPath() {
 		return project.getResource().getLocation();

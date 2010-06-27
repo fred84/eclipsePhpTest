@@ -1,36 +1,51 @@
 package me.galkin.eclipse.php.domain;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IScriptProject;
 
 public class PHPUnitCommand extends TestCommand {
 
+	private File report;
+	
 	public PHPUnitCommand(IModelElement unit, IScriptProject project, String executable) {
 		super(unit, project, executable);
 	}
 	
-	public String[] toCommand(File report) {
+	public String[] toCommand() throws IOException {
 		if (null != getBootstrap()) {
 			return new String[] {
-				executable, 
+				executable,
 				"--bootstrap=" + getBootstrap().toOSString(),
-				"--log-junit=" + report.getAbsolutePath(),
+				"--log-junit=" + getReport().getAbsolutePath(),
 				"--tap", 
 				getTestPath().toOSString()
 			};
 		} else {
 			return new String[] {
 				executable, 
-				"--log-junit=" + report.getAbsolutePath(),
+				"--log-junit=" + getReport().getAbsolutePath(),
 				"--tap", 
 				getTestPath().toOSString()
 			};
 		}
 	}
 	
+	public File getReport() throws IOException {
+		if (null == report) {
+			report = File.createTempFile("php-test-report", "xml");
+		}
+		return report;
+	}
+	
 	protected void finalize() throws Throwable {
+		try {
+			getReport().delete();
+		} catch (Throwable e) {
+			/* ^_^ */
+		}
 		super.finalize();
 	}
 	

@@ -3,6 +3,7 @@ package me.galkin.eclipse.php.handler;
 import java.util.List;
 
 import me.galkin.eclipse.php.domain.PHPUnitCommand;
+import me.galkin.eclipse.php.domain.PHPUnitExecAnalyzer;
 import me.galkin.eclipse.php.domain.ProjectFinder;
 import me.galkin.eclipse.php.domain.ProjectNotFoundException;
 import me.galkin.eclipse.php.ui.ResultView;
@@ -22,8 +23,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class Handler extends AbstractHandler {
-	
-	
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -60,10 +59,11 @@ public class Handler extends AbstractHandler {
 		}
 
 		try {
-			
-			
-			Job testJob = new PHPTestJob(view, new PHPUnitCommand(unit, ProjectFinder.getProject(unit),phpunit));
-		
+			Job testJob = new PHPTestJob(
+					view, 
+					new PHPUnitCommand(unit, ProjectFinder.getProject(unit),phpunit),
+					new PHPUnitExecAnalyzer()	
+			);
 			
 			testJob.schedule();
 		} catch (ProjectNotFoundException e) {
@@ -88,7 +88,6 @@ public class Handler extends AbstractHandler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private IModelElement getSelection(ExecutionEvent event) {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil
 				.getActiveMenuSelection(event);
@@ -105,8 +104,8 @@ public class Handler extends AbstractHandler {
 				IEvaluationContext ctx = (IEvaluationContext) event
 						.getApplicationContext();
 
-				List defaultVariables = (List) ctx.getDefaultVariable();
-				elem = defaultVariables.get(0);
+				Object defaultVariables = ctx.getDefaultVariable();
+				elem = ((List<?>)defaultVariables).get(0);
 			}
 
 			// dependency on internal PDT class
@@ -116,7 +115,6 @@ public class Handler extends AbstractHandler {
 
 			return (IModelElement) elem;
 		} catch (Exception e) {
-			// TODO notify user about bad selection
 			return null;
 		}
 	}
