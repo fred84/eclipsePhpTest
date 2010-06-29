@@ -8,4 +8,8 @@ public class ExecutionFailedException extends Exception {
 		super(error);
 	}
 
+	public ExecutionFailedException(String message, Exception e) {
+		super(message, e);
+	}
+
 }

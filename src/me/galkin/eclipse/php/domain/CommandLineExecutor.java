@@ -39,10 +39,10 @@ public class CommandLineExecutor {
 		public void run() {
 			try {
 				BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-
+				
 				String line;
 				while ((line = br.readLine()) != null) {
-					result.append(line);
+					result.append(line + "\n");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

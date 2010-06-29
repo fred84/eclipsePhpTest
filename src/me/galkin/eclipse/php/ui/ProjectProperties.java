@@ -74,11 +74,12 @@ public class ProjectProperties extends PropertyPage implements IPropertyChangeLi
 	
 	private void createBootstrapField(Composite parent) {
 		bootstrap = new FileFieldEditor("bootstrap", "bootstrap", false, createDefaultComposite(parent));
+		bootstrap.setEmptyStringAllowed(true);
 		bootstrap.setPage(this);
 		
 		bootstrap.setPropertyChangeListener(this);
 		bootstrap.setStringValue(getBootstrapValue());
-		
+		bootstrap.setFocus();
 		setValid(bootstrap.isValid());
 	}
 	

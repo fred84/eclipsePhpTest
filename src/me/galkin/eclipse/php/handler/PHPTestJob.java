@@ -49,6 +49,8 @@ public class PHPTestJob extends Job {
 			notifyFailure(e);
 		} catch (Exception e) {
 			return new Status(IStatus.ERROR, PHPUnitPlugin.PLUGIN_ID, IStatus.ERROR, "error", e);
+		} finally {
+			command.cleanUp();
 		}
 		
 		return Status.OK_STATUS;

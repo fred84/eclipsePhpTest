@@ -4,15 +4,14 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 
-	private Pattern regex = Pattern.compile(".*1\\.\\.\\d+$", Pattern.MULTILINE | Pattern.DOTALL);
-	
-	public IResultsComposite getResults(TestCommand command, String out, String err) throws ResultsNotFoundException, ExecutionFailedException {
-		if (!isSuccessful(err, out)) {
-			throw new ExecutionFailedException(getError(err, out));
+	public IResultsComposite getResults(TestCommand command, String out, String err) throws ExecutionFailedException {
+		String errorMsg = getError(err, out);
+		
+		if (!errorMsg.equals("")) {
+			throw new ExecutionFailedException(errorMsg);
 		}
 		
 		String xml;
@@ -21,16 +20,11 @@ public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 		} catch (IOException e) {
 			throw new ExecutionFailedException("Error reading results file");
 		}
-		
-		return new XmlReportParser().parse(xml);
-	}
-	
-	private boolean isSuccessful(String err, String out) {
-		if (!err.equals("")) {
-			return false;
+		try {
+			return new XmlReportParser().parse(xml);
+		} catch (ResultsNotFoundException e) {
+			throw new ExecutionFailedException("Parsing failed", e);
 		}
-
-		return regex.matcher(out).matches();
 	}
 	
 	private String getError(String err, String out) {
@@ -38,17 +32,17 @@ public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 			return err;
 		}
 		
-		if (isSuccessful(err, out)) {
+		String[] lines = out.split("\n");
+		
+		if (lines[lines.length - 1].startsWith("OK (")) {
+			return "";
+		}
+		
+		if (lines[lines.length - 2].equals("FAILURES!")) {
 			return "";
 		}
 	
-		int index = out.lastIndexOf("\n");
-		
-		if (-1 == index) {
-			return out.replace("TAP version 13", "");
-		}
-		
-		return out.substring(index + 1).replace("TAP version 13", "");
+		return lines[lines.length - 1];
 	}
 	
 	private static String readFileAsString(File file) throws java.io.IOException{

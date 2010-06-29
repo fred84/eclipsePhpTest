@@ -19,10 +19,6 @@ public abstract class TestCommand {
 	protected IModelElement unit;
 	
 	public TestCommand(IModelElement unit, IScriptProject project, String executable) {
-		if (!(unit instanceof ISourceModule || unit instanceof IScriptFolder)) {
-			throw new RuntimeException("invalid argument");
-		}
-		
 		this.unit = unit;
 		this.project = project;
 		this.executable = executable;
@@ -30,6 +26,10 @@ public abstract class TestCommand {
 	
 	public File getWorkingDirectory() {
 		return getWorkingPath().toFile();
+	}
+	
+	public void cleanUp() {
+		
 	}
 	
 	abstract public String[] toCommand() throws IOException;

@@ -20,14 +20,12 @@ public class PHPUnitCommand extends TestCommand {
 				executable,
 				"--bootstrap=" + getBootstrap().toOSString(),
 				"--log-junit=" + getReport().getAbsolutePath(),
-				"--tap", 
 				getTestPath().toOSString()
 			};
 		} else {
 			return new String[] {
 				executable, 
 				"--log-junit=" + getReport().getAbsolutePath(),
-				"--tap", 
 				getTestPath().toOSString()
 			};
 		}
@@ -40,14 +38,11 @@ public class PHPUnitCommand extends TestCommand {
 		return report;
 	}
 	
-	protected void finalize() throws Throwable {
+	public void cleanUp() {
 		try {
 			getReport().delete();
 		} catch (Throwable e) {
 			/* ^_^ */
 		}
-		super.finalize();
 	}
-	
-	
 }
