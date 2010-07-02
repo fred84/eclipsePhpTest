@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.dltk.core;bundle-version="1.0.2",
  org.eclipse.core.resources;bundle-version="3.5.2",
  org.apache.xerces;bundle-version="2.9.0",
- org.junit4,
  org.eclipse.php.core;bundle-version="2.1.1",
  org.eclipse.core.expressions;bundle-version="3.4.101"
 Bundle-ActivationPolicy: lazy
