@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="me.galkin.eclipse.phpunit.feature"
+      version="0.0.11">
+
+   <description>
+      Plugin for executing PHPUnit tests inside Eclipse. Supports Eclipse 3.5 and 3.6.
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      Copyleft
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      Free
+   </license>
+
+   <url>
+      <discovery label="galkin.me" url="http://galkin.me"/>
+   </url>
+
+   <requires>
+      <import feature="org.eclipse.php.sdk" version="1.0.2" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="me.galkin.eclipse.phpunit.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.11"
+         unpack="false"/>
+
+</feature>
