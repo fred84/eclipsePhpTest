@@ -1,12 +1,15 @@
 package me.galkin.eclipse.php.handler;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import me.galkin.eclipse.php.PHPUnitPlugin;
-import me.galkin.eclipse.php.domain.CommandLineExecutor;
 import me.galkin.eclipse.php.domain.ExecutionFailedException;
 import me.galkin.eclipse.php.domain.IExecAnalyzer;
 import me.galkin.eclipse.php.domain.IResultsComposite;
 import me.galkin.eclipse.php.domain.TestCommand;
-import me.galkin.eclipse.php.domain.CommandLineExecutor.Buffers;
 import me.galkin.eclipse.php.ui.ResultView;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,12 +22,36 @@ public class PHPTestJob extends Job {
 
 	public static final String FAMILY = "PHP.Test.Job";
 	
+	private static class OutputBuffer extends Thread {
+		private InputStream stream;
+		private StringBuffer result = new StringBuffer();
+
+		OutputBuffer(final InputStream is) {
+			stream = is;
+		}
+
+		public void run() {
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+				
+				String line;
+				while ((line = br.readLine()) != null) {
+					result.append(line + "\n");
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		String getOutput() {
+			return result.toString();
+		}
+	}
+	
 	private ResultView view;
 	private TestCommand command;
 	private IExecAnalyzer analyzer;
-	
-	private CommandLineExecutor exec = new CommandLineExecutor();
-	
+
 	public PHPTestJob(ResultView view, TestCommand command, IExecAnalyzer analyzer) {
 		super(FAMILY);
 		this.view = view;
@@ -40,9 +67,17 @@ public class PHPTestJob extends Job {
 		try {
 			notifyRunning();
 			
-			Buffers buff = exec.customCommand(command.toCommand(), command.getWorkingDirectory());			
+			Process process = Runtime.getRuntime().exec(command.toCommand(), new String[0], command.getWorkingDirectory());
+			
+			OutputBuffer stderr = new OutputBuffer(process.getErrorStream());         
+			OutputBuffer stdout = new OutputBuffer(process.getInputStream());       
 
-			final IResultsComposite result = analyzer.getResults(command, buff.getOut(), buff.getErr()); 
+			stderr.start();
+			stdout.start();
+			
+			process.waitFor();
+
+			final IResultsComposite result = analyzer.getResults(command, stdout.getOutput(), stderr.getOutput()); 
 				
 			notifyCompleted(result);
 		} catch (final ExecutionFailedException e) {
