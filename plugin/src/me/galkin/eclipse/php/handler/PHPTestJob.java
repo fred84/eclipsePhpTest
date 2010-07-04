@@ -36,6 +36,7 @@ public class PHPTestJob extends Job {
 				
 				String line;
 				while ((line = br.readLine()) != null) {
+			
 					result.append(line + "\n");
 				}
 			} catch (IOException e) {
@@ -91,6 +92,14 @@ public class PHPTestJob extends Job {
 		return Status.OK_STATUS;
 	}
 
+	private void notifyCount(final int count, final int total) {
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				view.notifyCount(count, total);
+			}
+		});
+	}
+	
 	private void notifyFailure(final ExecutionFailedException e) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
