@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/me.galkin.eclipse.phpunit.feature_0.0.11.jar" id="me.galkin.eclipse.phpunit.feature" version="0.0.11">
+   <feature url="features/me.galkin.eclipse.phpunit.feature_0.0.16.jar" id="me.galkin.eclipse.phpunit.feature" version="0.0.16">
       <category name="php.testing.tools"/>
    </feature>
    <category-def name="php.testing.tools" label="PHP testing tools"/>

@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.GridLayout;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
@@ -22,11 +23,11 @@ public class ResultView extends ViewPart {
 	public static final String ID = "me.galkin.eclipse.php.ui.ResultView";
 
 	private final GridData singleElementData = new GridData(SWT.FILL,
-			SWT.CENTER, false, false);
+			SWT.CENTER, true, false);
 
 	private TreeViewer viewer;
 
-	private Label description;
+	private Text description;
 	private Label failedCount;
 	private Label totalCount;
 	private Label errorCount;
@@ -35,7 +36,7 @@ public class ResultView extends ViewPart {
 	private TreeContentProvider provider = new TreeContentProvider();
 
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new GridLayout(7, false));
+		parent.setLayout(new GridLayout(12, true));
 
 		createLabel(parent, "Runs:");
 		totalCount = createLabel(parent, "0");
@@ -96,11 +97,9 @@ public class ResultView extends ViewPart {
 
 		if (suites.getFailedResultsCount() > 0
 				|| suites.getErrorResultsCount() > 0) {
-			bar.update(suites.getResultsCount(), suites.getResultsCount(),
-					ResultBar.FAIL);
+			bar.update(1, 1, ResultBar.FAIL);
 		} else {
-			bar.update(suites.getResultsCount(), suites.getResultsCount(),
-					ResultBar.OK);
+			bar.update(1, 1, ResultBar.OK);
 		}
 
 		for (IResultsComposite suite : suites.getChilden()) {
@@ -159,9 +158,13 @@ public class ResultView extends ViewPart {
 	}
 
 	private void createDescription(Composite parent) {
-		description = new Label(parent, SWT.SINGLE | SWT.BORDER
+		GridData grid = new GridData(GridData.FILL, GridData.FILL,
+				true, true);
+		
+		grid.horizontalSpan = 6;
+		
+		description = new Text(parent, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER
 				| SWT.SHADOW_ETCHED_IN | SWT.H_SCROLL | SWT.V_SCROLL);
-		description.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
-				true, true));
+		description.setLayoutData(grid);
 	}
 }

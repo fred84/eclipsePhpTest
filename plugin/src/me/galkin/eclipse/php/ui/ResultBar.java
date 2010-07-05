@@ -28,8 +28,11 @@ public class ResultBar extends Canvas {
 
 	public ResultBar(Composite parent, int style) {
 		super(parent, style);
-		setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, false, false));
 
+		GridData data = new GridData(SWT.FILL, SWT.BEGINNING, false, false);
+		data.horizontalSpan = 6;
+		setLayoutData(data);
+		
 		GREEN = new Color(getDisplay(), 95, 191, 95);
 		RED = new Color(getDisplay(), 159, 63, 63);
 		
