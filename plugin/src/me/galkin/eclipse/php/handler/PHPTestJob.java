@@ -9,6 +9,7 @@ import me.galkin.eclipse.php.PHPUnitPlugin;
 import me.galkin.eclipse.php.domain.ExecutionFailedException;
 import me.galkin.eclipse.php.domain.IExecAnalyzer;
 import me.galkin.eclipse.php.domain.IResultsComposite;
+import me.galkin.eclipse.php.domain.ResultsCount;
 import me.galkin.eclipse.php.domain.TestCommand;
 import me.galkin.eclipse.php.ui.ResultView;
 
@@ -22,7 +23,7 @@ public class PHPTestJob extends Job {
 
 	public static final String FAMILY = "PHP.Test.Job";
 	
-	private static class OutputBuffer extends Thread {
+	private class OutputBuffer extends Thread {
 		private InputStream stream;
 		private StringBuffer result = new StringBuffer();
 
@@ -37,6 +38,8 @@ public class PHPTestJob extends Job {
 				String line;
 				while ((line = br.readLine()) != null) {
 			
+					//PHPTestJob.this.notifyCount(line);
+					
 					result.append(line + "\n");
 				}
 			} catch (IOException e) {
@@ -92,10 +95,14 @@ public class PHPTestJob extends Job {
 		return Status.OK_STATUS;
 	}
 
-	private void notifyCount(final int count, final int total) {
+	private synchronized void notifyCount(final String line) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				view.notifyCount(count, total);
+				final ResultsCount count = analyzer.parseString(line); 
+				
+				if (null != count) {
+					view.notifyCount(count);
+				}
 			}
 		});
 	}

@@ -1,5 +1,7 @@
 package me.galkin.eclipse.php.ui;
 
+import me.galkin.eclipse.php.domain.ResultsCount;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -41,7 +43,7 @@ public class ResultBar extends Canvas {
 				e.gc.setBackground(status.equals(OK) ? GREEN : RED);
 				
 				Rectangle rect = e.display.getClientArea();
-				e.gc.fillRectangle(rect.x, rect.y, rect.width * (selection/max), rect.height);
+				e.gc.fillRectangle(rect.x, rect.y, (int) (rect.width * getPercantage()), rect.height);
 			}
 		});
 		
@@ -58,10 +60,18 @@ public class ResultBar extends Canvas {
 		return super.computeSize(wHint, HEIGHT, changed);
 	}
 	
-	public void update(int maximum, int selection, String status) {
-		this.max = maximum;
-		this.selection = selection;
+	public void update(ResultsCount count, String status) {
+		this.max = count.getTotal();
+		this.selection = count.getExecuted();
 		this.status = status;
 		redraw();
+	}
+	
+	private double getPercantage() {
+		if (0 == max) {
+			return 1;
+		}
+		
+		return (double)selection / (double)max;
 	}
 }

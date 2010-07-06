@@ -8,9 +8,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.IScriptFolder;
 import org.eclipse.dltk.core.IScriptProject;
-import org.eclipse.dltk.core.ISourceModule;
 
 public abstract class TestCommand {
 

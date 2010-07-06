@@ -2,6 +2,7 @@ package me.galkin.eclipse.php.ui;
 
 import me.galkin.eclipse.php.PHPUnitPlugin;
 import me.galkin.eclipse.php.domain.IResultsComposite;
+import me.galkin.eclipse.php.domain.ResultsCount;
 import me.galkin.eclipse.php.utils.Images;
 import me.galkin.eclipse.php.utils.ResultSelector;
 
@@ -71,12 +72,12 @@ public class ResultView extends ViewPart {
 	}
 
 	public void notifyRunning() {
-		bar.update(0, 1, ResultBar.OK);
+		bar.update(ResultsCount.started(), ResultBar.OK);
 	}
 
-	public void notifyCount(int count, int total) {
-		totalCount.setText(String.valueOf(total));
-		bar.update(count, total, ResultBar.OK);
+	public void notifyCount(ResultsCount count) {
+		totalCount.setText(String.valueOf(count.getTotal()));
+		bar.update(count, ResultBar.OK);
 	}
 
 	public void notifyFailure(String failure) {
@@ -84,7 +85,7 @@ public class ResultView extends ViewPart {
 		failedCount.setText("0");
 		errorCount.setText("0");
 
-		bar.update(1, 1, ResultBar.FAIL);
+		bar.update(ResultsCount.failure(), ResultBar.FAIL);
 
 		provider.clear();
 		viewer.refresh();
@@ -97,9 +98,9 @@ public class ResultView extends ViewPart {
 
 		if (suites.getFailedResultsCount() > 0
 				|| suites.getErrorResultsCount() > 0) {
-			bar.update(1, 1, ResultBar.FAIL);
+			bar.update(ResultsCount.completed(), ResultBar.FAIL);
 		} else {
-			bar.update(1, 1, ResultBar.OK);
+			bar.update(ResultsCount.completed(), ResultBar.OK);
 		}
 
 		for (IResultsComposite suite : suites.getChilden()) {

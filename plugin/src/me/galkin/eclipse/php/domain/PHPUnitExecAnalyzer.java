@@ -52,4 +52,8 @@ public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 	    return new String(buffer);
 	}
 
+	public ResultsCount parseString(String line) {
+		return null;
+	}
+
 }

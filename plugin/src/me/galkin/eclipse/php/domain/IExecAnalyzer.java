@@ -4,4 +4,6 @@ public interface IExecAnalyzer {
 
 	public IResultsComposite getResults(TestCommand command, String out, String err) throws ExecutionFailedException;
 	
+	public ResultsCount parseString(String line);
+	
 }
