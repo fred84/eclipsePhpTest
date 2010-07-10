@@ -2,6 +2,7 @@ package me.galkin.eclipse.php.handler;
 
 import java.util.List;
 
+import me.galkin.eclipse.php.PHPUnitPlugin;
 import me.galkin.eclipse.php.domain.PHPUnitCommand;
 import me.galkin.eclipse.php.domain.PHPUnitExecAnalyzer;
 import me.galkin.eclipse.php.domain.ProjectFinder;
@@ -12,7 +13,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.expressions.IEvaluationContext;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -48,10 +48,10 @@ public class Handler extends AbstractHandler {
 			return null;
 		}
 
-		String phpunit = Platform.getPreferencesService().getString(
-				"PHPUnit_plugin", "executable", null, null);
+		String phpunit = PHPUnitPlugin.getDefault().getPreferenceStore().getString(
+				PHPUnitPlugin.EXECUTABLE);
 
-		if (null == phpunit) {
+		if (null == phpunit || phpunit.equals("")) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 					"Information",
 					"Please setup phpunit path in plugin preferences");

@@ -8,11 +8,11 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-
 public class PHPUnitPlugin extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "me.galkin.eclipse.php";
-
+	public static final String EXECUTABLE = "executable";
+	
 	private static AbstractUIPlugin plugin;
 	
 	private Bundle bundle;

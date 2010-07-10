@@ -8,6 +8,8 @@ import org.eclipse.ui.IWorkbench;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
+	private FileFieldEditor field;
+	
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(PHPUnitPlugin.getDefault().getPreferenceStore());
@@ -15,13 +17,18 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	}
 
 	public void createFieldEditors() {
-		addField(new FileFieldEditor(
-				"executable", 
+		field = new FileFieldEditor(
+				PHPUnitPlugin.EXECUTABLE, 
 				"PHPUnit path", 
 				true, 
 				getFieldEditorParent()
-				) 
 		);
+		
+		field.setStringValue(
+				PHPUnitPlugin.getDefault().getPreferenceStore().getString(PHPUnitPlugin.EXECUTABLE)
+		);
+		
+		addField(field);
 	}
 
 	public void init(IWorkbench workbench) {}	
