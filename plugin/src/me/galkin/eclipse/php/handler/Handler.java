@@ -3,6 +3,7 @@ package me.galkin.eclipse.php.handler;
 import java.util.List;
 
 import me.galkin.eclipse.php.PHPUnitPlugin;
+import me.galkin.eclipse.php.domain.IExecAnalyzer;
 import me.galkin.eclipse.php.domain.PHPUnitCommand;
 import me.galkin.eclipse.php.domain.PHPUnitExecAnalyzer;
 import me.galkin.eclipse.php.domain.ProjectFinder;
@@ -24,11 +25,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class Handler extends AbstractHandler {
 
+	private IExecAnalyzer analyzer = new PHPUnitExecAnalyzer();
+	
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		Job[] jobs = Job.getJobManager().find(PHPTestJob.FAMILY);
-		
-		if (jobs.length > 0) {
+		if (isAlreadyRunning()) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 					"Information", "Another test already running");
 			return null;
@@ -48,10 +50,7 @@ public class Handler extends AbstractHandler {
 			return null;
 		}
 
-		String phpunit = PHPUnitPlugin.getDefault().getPreferenceStore().getString(
-				PHPUnitPlugin.EXECUTABLE);
-
-		if (null == phpunit || phpunit.equals("")) {
+		if (null == getExecutable()) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 					"Information",
 					"Please setup phpunit path in plugin preferences");
@@ -61,15 +60,14 @@ public class Handler extends AbstractHandler {
 		try {
 			Job testJob = new PHPTestJob(
 					view, 
-					new PHPUnitCommand(unit, ProjectFinder.getProject(unit),phpunit),
-					new PHPUnitExecAnalyzer()	
+					new PHPUnitCommand(unit, ProjectFinder.getProject(unit), getExecutable()),
+					analyzer
 			);
 			
 			testJob.schedule();
 		} catch (ProjectNotFoundException e) {
 			MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 					"Information", e.getMessage());
-			return null;
 		}
 
 		return null;
@@ -88,6 +86,21 @@ public class Handler extends AbstractHandler {
 		}
 	}
 
+	private boolean isAlreadyRunning() {
+		return Job.getJobManager().find(PHPTestJob.FAMILY).length > 0;
+	}
+	
+	private String getExecutable() {
+		String executable = PHPUnitPlugin.getDefault().getPreferenceStore().getString(
+				PHPUnitPlugin.EXECUTABLE);
+		
+		if (executable.equals("")) {
+			return null;
+		}
+		
+		return executable;
+	}
+	
 	private IModelElement getSelection(ExecutionEvent event) {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil
 				.getActiveMenuSelection(event);
