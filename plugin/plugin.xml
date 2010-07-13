@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.5"?>
+<?eclipse version="3.6"?>
 <plugin>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="popup:org.eclipse.php.ui.explorer">
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="me.galkin.eclipse.php.runtests"
                label="Run PHPUnit"
                style="push">
 			<visibleWhen>
-				<with variable="activeMenuSelection">
-					<iterate>
-						<or>
-							<adapt type="org.eclipse.dltk.core.ISourceModule"/>
-							<adapt type="org.eclipse.dltk.core.IScriptFolder"/>
-						</or>	
-					</iterate>
-				</with>
+				<or>
+					<with variable="selection">
+						<and>
+							<count value="1"/>
+							<iterate>
+								<or>
+									<adapt type="org.eclipse.dltk.core.ISourceModule"/>
+									<adapt type="org.eclipse.dltk.core.IScriptFolder"/>
+								</or>	
+							</iterate>
+						</and>
+					</with>
+					<with variable="activeEditor">
+						<adapt type="org.eclipse.wst.sse.ui.StructuredTextEditor"/>
+    				</with>
+				</or>
 			</visibleWhen>
-         </command>
-      </menuContribution>
-       <menuContribution locationURI="popup:org.eclipse.php.core.phpsource.source.EditorContext">
-         <command
-               commandId="me.galkin.eclipse.php.runtests"
-               label="Run PHPUnit"
-               style="push">
          </command>
       </menuContribution>
    </extension>
