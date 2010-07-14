@@ -4,13 +4,13 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+            locationURI="popup:org.eclipse.php.ui.explorer">
          <command
                commandId="me.galkin.eclipse.php.runtests"
                label="Run PHPUnit"
                style="push">
 			<visibleWhen>
-				<or>
+
 					<with variable="selection">
 						<and>
 							<count value="1"/>
@@ -22,13 +22,12 @@
 							</iterate>
 						</and>
 					</with>
-					<with variable="activeEditor">
-						<adapt type="org.eclipse.wst.sse.ui.StructuredTextEditor"/>
-    				</with>
-				</or>
 			</visibleWhen>
          </command>
       </menuContribution>
+      <menuContribution locationURI="popup:org.eclipse.php.core.phpsource.source.EditorContext">
+		<command commandId="me.galkin.eclipse.php.runtests" label="Run PHPUnit" style="push"/>
+	  </menuContribution>
    </extension>
    <extension point="org.eclipse.ui.bindings">
    		<key sequence="M1+M2+D" 
@@ -62,7 +61,7 @@
       <page
             class="me.galkin.eclipse.php.ui.PreferencePage"
             id="me.galkin.eclipse.php.ui.PreferencePage"
-            name="PHPUnit Preferences">
+            name="PHPUnit">
       </page>
    </extension>
    <extension point="org.eclipse.core.runtime.preferences"/>
@@ -70,7 +69,7 @@
       <page
             class="me.galkin.eclipse.php.ui.ProjectProperties"
             id="me.galkin.eclipse.php.ui.ProjectProperties"
-            name="PHPUnit properties"
+            name="PHPUnit"
             >
 			<enabledWhen>
  				<instanceof value="org.eclipse.dltk.core.IScriptProject"/>

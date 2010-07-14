@@ -40,7 +40,7 @@ public class ResultView extends ViewPart {
 		parent.setLayout(new GridLayout(12, true));
 
 		createLabel(parent, "Runs:");
-		totalCount = createLabel(parent, "0");
+		totalCount = createLabel(parent, formatCount(ResultsCount.started()));
 		createLabel(parent, "Errors:", getImage(Images.IMAGE_ERRORS));
 		errorCount = createLabel(parent, "0");
 		createLabel(parent, "Failures:", getImage(Images.IMAGE_FAILURES));
@@ -72,16 +72,16 @@ public class ResultView extends ViewPart {
 	}
 
 	public void notifyRunning() {
-		bar.update(ResultsCount.started(), ResultBar.OK);
+		bar.update(ResultsCount.started(), ResultBar.RUNNING);
 	}
 
 	public void notifyCount(ResultsCount count) {
-		totalCount.setText(String.valueOf(count.getTotal()));
-		bar.update(count, ResultBar.OK);
+		totalCount.setText(formatCount(count));
+		bar.update(count, ResultBar.RUNNING);
 	}
 
 	public void notifyFailure(String failure) {
-		totalCount.setText("0");
+		totalCount.setText(formatCount(ResultsCount.failure()));
 		failedCount.setText("0");
 		errorCount.setText("0");
 
@@ -98,16 +98,16 @@ public class ResultView extends ViewPart {
 
 		if (suites.getFailedResultsCount() > 0
 				|| suites.getErrorResultsCount() > 0) {
-			bar.update(ResultsCount.completed(), ResultBar.FAIL);
+			bar.update(ResultsCount.completed(suites.getResultsCount()), ResultBar.FAIL);
 		} else {
-			bar.update(ResultsCount.completed(), ResultBar.OK);
+			bar.update(ResultsCount.completed(suites.getResultsCount()), ResultBar.OK);
 		}
 
 		for (IResultsComposite suite : suites.getChilden()) {
 			provider.add(suite);
 		}
 
-		totalCount.setText(String.valueOf(suites.getResultsCount()));
+		totalCount.setText(formatCount(ResultsCount.completed(suites.getResultsCount())));
 		failedCount.setText(String.valueOf(suites.getFailedResultsCount()));
 		errorCount.setText(String.valueOf(suites.getErrorResultsCount()));
 
@@ -167,5 +167,9 @@ public class ResultView extends ViewPart {
 		description = new Text(parent, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER
 				| SWT.SHADOW_ETCHED_IN | SWT.H_SCROLL | SWT.V_SCROLL);
 		description.setLayoutData(grid);
+	}
+	
+	private String formatCount(ResultsCount count) {
+		return String.valueOf(count.getExecuted() + " / " + count.getTotal());
 	}
 }

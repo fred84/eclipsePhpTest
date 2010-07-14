@@ -9,7 +9,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -18,14 +17,15 @@ public class ResultBar extends Canvas {
 
 	public static final String FAIL = "fail";
 	public static final String OK = "ok";
+	public static final String RUNNING = "running";
 	
 	private final int HEIGHT = 18;
 	
 	private final Color GREEN;
 	private final Color RED;
+	private final Color GRAY;
 	
-	private int max = 1;
-	private int selection = 0;
+	private double percentage = 0;
 	private String status = OK;
 
 	public ResultBar(Composite parent, int style) {
@@ -37,13 +37,12 @@ public class ResultBar extends Canvas {
 		
 		GREEN = new Color(getDisplay(), 95, 191, 95);
 		RED = new Color(getDisplay(), 159, 63, 63);
+		GRAY = new Color(getDisplay(), 155, 155, 155);
 		
 		this.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
-				e.gc.setBackground(status.equals(OK) ? GREEN : RED);
-				
-				Rectangle rect = e.display.getClientArea();
-				e.gc.fillRectangle(rect.x, rect.y, (int) (rect.width * getPercantage()), rect.height);
+				e.gc.setBackground(getColor(status));
+				e.gc.fillRectangle(e.x, e.y, (int) ((e.width - 10) * percentage), e.height);
 			}
 		});
 		
@@ -52,6 +51,7 @@ public class ResultBar extends Canvas {
 			public void widgetDisposed(DisposeEvent e) {
 				GREEN.dispose();
 				RED.dispose();
+				GRAY.dispose();
 			}
 		});
 	}
@@ -61,17 +61,16 @@ public class ResultBar extends Canvas {
 	}
 	
 	public void update(ResultsCount count, String status) {
-		this.max = count.getTotal();
-		this.selection = count.getExecuted();
+		this.percentage = count.getPercentage();
 		this.status = status;
 		redraw();
 	}
 	
-	private double getPercantage() {
-		if (0 == max) {
-			return 1;
+	private Color getColor(String status) {
+		if (status.equals(OK)) {
+			return GREEN;
 		}
 		
-		return (double)selection / (double)max;
+		return status.equals(FAIL) ? RED : GRAY;
 	}
 }

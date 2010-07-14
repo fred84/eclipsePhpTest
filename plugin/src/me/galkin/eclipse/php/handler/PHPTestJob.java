@@ -32,23 +32,27 @@ public class PHPTestJob extends Job {
 		}
 
 		public void run() {
-			try {
-				BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-				
-				String line;
-				while ((line = br.readLine()) != null) {
-			
-					//PHPTestJob.this.notifyCount(line);
+			synchronized (this) {
+				try {
+					BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 					
-					result.append(line + "\n");
+					String line;
+					while ((line = br.readLine()) != null) {
+				
+						PHPTestJob.this.notifyCount(line);
+						
+						result.append(line + "\n");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 
 		String getOutput() {
-			return result.toString();
+			synchronized (this) {
+				return result.toString();
+			}
 		}
 	}
 	
@@ -75,7 +79,7 @@ public class PHPTestJob extends Job {
 			
 			OutputBuffer stderr = new OutputBuffer(process.getErrorStream());         
 			OutputBuffer stdout = new OutputBuffer(process.getInputStream());       
-
+			
 			stderr.start();
 			stdout.start();
 			

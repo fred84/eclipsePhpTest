@@ -13,7 +13,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(PHPUnitPlugin.getDefault().getPreferenceStore());
-		setDescription("PHPUnit preferences");
+		setDescription("PHPUnit");
 	}
 
 	public void createFieldEditors() {

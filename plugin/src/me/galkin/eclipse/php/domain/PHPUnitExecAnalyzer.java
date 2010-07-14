@@ -4,9 +4,13 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 
+	private final Pattern progress = Pattern.compile("(\\d+)\\s\\/\\s(\\d+)$");
+	
 	public IResultsComposite getResults(TestCommand command, String out, String err) throws ExecutionFailedException {
 		String errorMsg = getError(err, out);
 		
@@ -34,6 +38,10 @@ public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 		
 		String[] lines = out.split("\n");
 		
+		if (lines.length < 3) {
+			return out;
+		}
+		
 		if (lines[lines.length - 1].startsWith("OK (")) {
 			return "";
 		}
@@ -53,7 +61,12 @@ public class PHPUnitExecAnalyzer implements IExecAnalyzer {
 	}
 
 	public ResultsCount parseString(String line) {
+		Matcher matcher = progress.matcher(line);
+		
+		if (matcher.find()) {
+			return ResultsCount.running(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+		} 
+		
 		return null;
 	}
-
 }

@@ -69,6 +69,26 @@ public class PHPUnitExecAnalyzerTest {
 		}
 	}
 	
+	@Test
+	public void parseLine_progress() {
+		assertEquals(
+				ResultsCount.running(180, 540), 
+				analyzer.parseString(getProgressOutput())
+		);	
+	}
+	
+	@Test
+	public void parseLine_nonProgressLine() {
+		assertNull(analyzer.parseString(getNonProgressOutput()));
+	}
+	
+	private String getProgressOutput() {
+		return "............................................................ 180 / 540";
+	}
+	
+	private String getNonProgressOutput() {
+		return "PHPUnit 3.4.14 by Sebastian Bergmann.";
+	}
 	
 	private String getSuccessfulOutput() {
 		return "PHPUnit 3.4.14 by Sebastian Bergmann."
